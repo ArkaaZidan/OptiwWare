@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,32 +8,363 @@
   <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css" type="text/css">
   <script src="https://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
   <style>
-    :root{--navy:#10213a;--navy2:#1b3552;--teal:#16b8a6;--muted:#728096;--ink:#182b40}
-    *{box-sizing:border-box} body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f0f4f8;color:var(--ink);min-height:100vh}
-    .page{min-height:100vh;display:grid;grid-template-columns:minmax(320px,1fr) minmax(360px,0.95fr)}
-    .hero{background:linear-gradient(145deg,#0d1b30 0%,#142f4a 64%,#0c4a54 140%);padding:56px clamp(28px,6vw,88px);color:#fff;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative}
-    .hero:after{content:"";position:absolute;width:460px;height:460px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-210px;bottom:-130px;box-shadow:0 0 0 55px rgba(255,255,255,.025),0 0 0 110px rgba(255,255,255,.02)}
-    .brand{display:flex;align-items:center;gap:12px;position:relative;z-index:1}.brand-mark{width:48px;height:48px;background:var(--teal);border-radius:14px;display:grid;place-items:center;color:#08232d}.brand-name{font-size:26px;font-weight:800;letter-spacing:-.8px}.brand-sub{font-size:11px;letter-spacing:2px;color:#a9bdcf;text-transform:uppercase;margin-top:2px}
-    .hero-copy{max-width:600px;position:relative;z-index:1;margin:60px 0}.eyebrow{display:inline-flex;align-items:center;gap:8px;color:#75e1d4;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;font-weight:700}.eyebrow:before{content:"";width:24px;height:2px;background:#75e1d4}.hero h1{font-size:clamp(36px,4.5vw,60px);line-height:1.06;letter-spacing:-2px;margin:23px 0 20px;max-width:530px}.hero p{color:#b7c7d7;font-size:16px;line-height:1.8;max-width:460px;margin:0}.feature-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:42px;max-width:580px}.feature{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);padding:15px 13px;border-radius:12px}.feature-icon{color:#69e0d0;font-size:18px}.feature strong{display:block;font-size:12px;margin-top:11px}.feature span{display:block;color:#a4b8ca;font-size:11px;margin-top:5px;line-height:1.5}.hero-foot{position:relative;z-index:1;color:#8097ad;font-size:12px}
-    .right{display:flex;align-items:center;justify-content:center;padding:38px 24px}.login-card{width:min(420px,100%);background:#fff;border:1px solid #e5ebf1;border-radius:22px;padding:38px;box-shadow:0 20px 70px rgba(31,55,80,.08)}.mobile-brand{display:none}.card-overline{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#0c9d8f;font-weight:800}.login-card h2{font-size:29px;letter-spacing:-.8px;margin:10px 0 8px}.intro{margin:0 0 26px;color:var(--muted);font-size:14px;line-height:1.65}.field{margin:15px 0}.field label{display:block;font-size:12px;font-weight:700;margin:0 0 7px;color:#334a61}.field input{display:block;width:100%;height:46px;padding:0 13px;border:1px solid #d9e2eb;border-radius:10px;font-size:14px;outline:none;background:#fbfcfd}.field input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(22,184,166,.12)}.primary{width:100%;height:47px;border:0;border-radius:10px;background:#102b44;color:white;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px}.primary:hover{background:#17405c}.switch{margin-top:18px;text-align:center;font-size:12px;color:#718196}.switch button{border:0;background:none;color:#078c83;font-weight:800;cursor:pointer;padding:4px}.notice{display:none;margin:14px 0 0;padding:11px 12px;border-radius:9px;font-size:12px;line-height:1.5}.notice.error{display:block;background:#fff0ef;color:#a32c28}.notice.success{display:block;background:#e9faf6;color:#087665}.security{display:flex;align-items:center;justify-content:center;gap:7px;color:#8794a4;font-size:11px;margin-top:23px}
-    @media(max-width:850px){.page{grid-template-columns:1fr}.hero{display:none}.right{padding:28px 18px}.mobile-brand{display:flex;margin-bottom:28px;align-items:center;gap:10px}.login-card{padding:30px 25px}.mobile-brand .brand-name{font-size:22px}}
+    :root {
+      --navy: #10213a;
+      --navy2: #1b3552;
+      --teal: #16b8a6;
+      --muted: #728096;
+      --ink: #182b40
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f0f4f8;
+      color: var(--ink);
+      min-height: 100vh
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(360px, 0.95fr)
+    }
+
+    .hero {
+      background: linear-gradient(145deg, #0d1b30 0%, #142f4a 64%, #0c4a54 140%);
+      padding: 56px clamp(28px, 6vw, 88px);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative
+    }
+
+    .hero:after {
+      content: "";
+      position: absolute;
+      width: 460px;
+      height: 460px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 50%;
+      right: -210px;
+      bottom: -130px;
+      box-shadow: 0 0 0 55px rgba(255, 255, 255, .025), 0 0 0 110px rgba(255, 255, 255, .02)
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      background: var(--teal);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #08232d
+    }
+
+    .brand-name {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -.8px
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #a9bdcf;
+      text-transform: uppercase;
+      margin-top: 2px
+    }
+
+    .hero-copy {
+      max-width: 600px;
+      position: relative;
+      z-index: 1;
+      margin: 60px 0
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #75e1d4;
+      font-size: 12px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      font-weight: 700
+    }
+
+    .eyebrow:before {
+      content: "";
+      width: 24px;
+      height: 2px;
+      background: #75e1d4
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 4.5vw, 60px);
+      line-height: 1.06;
+      letter-spacing: -2px;
+      margin: 23px 0 20px;
+      max-width: 530px
+    }
+
+    .hero p {
+      color: #b7c7d7;
+      font-size: 16px;
+      line-height: 1.8;
+      max-width: 460px;
+      margin: 0
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 42px;
+      max-width: 580px
+    }
+
+    .feature {
+      border: 1px solid rgba(255, 255, 255, .12);
+      background: rgba(255, 255, 255, .045);
+      padding: 15px 13px;
+      border-radius: 12px
+    }
+
+    .feature-icon {
+      color: #69e0d0;
+      font-size: 18px
+    }
+
+    .feature strong {
+      display: block;
+      font-size: 12px;
+      margin-top: 11px
+    }
+
+    .feature span {
+      display: block;
+      color: #a4b8ca;
+      font-size: 11px;
+      margin-top: 5px;
+      line-height: 1.5
+    }
+
+    .hero-foot {
+      position: relative;
+      z-index: 1;
+      color: #8097ad;
+      font-size: 12px
+    }
+
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 38px 24px
+    }
+
+    .login-card {
+      width: min(420px, 100%);
+      background: #fff;
+      border: 1px solid #e5ebf1;
+      border-radius: 22px;
+      padding: 38px;
+      box-shadow: 0 20px 70px rgba(31, 55, 80, .08)
+    }
+
+    .mobile-brand {
+      display: none
+    }
+
+    .card-overline {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #0c9d8f;
+      font-weight: 800
+    }
+
+    .login-card h2 {
+      font-size: 29px;
+      letter-spacing: -.8px;
+      margin: 10px 0 8px
+    }
+
+    .intro {
+      margin: 0 0 26px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65
+    }
+
+    .field {
+      margin: 15px 0
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0 0 7px;
+      color: #334a61
+    }
+
+    .field input {
+      display: block;
+      width: 100%;
+      height: 46px;
+      padding: 0 13px;
+      border: 1px solid #d9e2eb;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      background: #fbfcfd
+    }
+
+    .field input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(22, 184, 166, .12)
+    }
+
+    .primary {
+      width: 100%;
+      height: 47px;
+      border: 0;
+      border-radius: 10px;
+      background: #102b44;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px
+    }
+
+    .primary:hover {
+      background: #17405c
+    }
+
+    .switch {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 12px;
+      color: #718196
+    }
+
+    .switch button {
+      border: 0;
+      background: none;
+      color: #078c83;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 4px
+    }
+
+    .notice {
+      display: none;
+      margin: 14px 0 0;
+      padding: 11px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 1.5
+    }
+
+    .notice.error {
+      display: block;
+      background: #fff0ef;
+      color: #a32c28
+    }
+
+    .notice.success {
+      display: block;
+      background: #e9faf6;
+      color: #087665
+    }
+
+    .security {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: #8794a4;
+      font-size: 11px;
+      margin-top: 23px
+    }
+
+    @media(max-width:850px) {
+      .page {
+        grid-template-columns: 1fr
+      }
+
+      .hero {
+        display: none
+      }
+
+      .right {
+        padding: 28px 18px
+      }
+
+      .mobile-brand {
+        display: flex;
+        margin-bottom: 28px;
+        align-items: center;
+        gap: 10px
+      }
+
+      .login-card {
+        padding: 30px 25px
+      }
+
+      .mobile-brand .brand-name {
+        font-size: 22px
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="page">
     <section class="hero">
       <div class="brand">
-        <div class="brand-mark"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7M8 11h2m4 0h2"/></svg></div>
-        <div><div class="brand-name">OptiWare</div><div class="brand-sub">Retail operations</div></div>
+        <div class="brand-mark"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 10 9-7 9 7" />
+            <path d="M5 9v12h14V9M9 21v-7h6v7M8 11h2m4 0h2" />
+          </svg></div>
+        <div>
+          <div class="brand-name">OptiWare</div>
+          <div class="brand-sub">Retail operations</div>
+        </div>
       </div>
       <div class="hero-copy">
         <div class="eyebrow">Inventory made clearer</div>
         <h1>Semua stok dalam satu kendali.</h1>
-        <p>Kelola produk, pantau persediaan, dan catat penjualan dengan alur kerja yang lebih rapi—langsung dari satu dashboard.</p>
+        <p>Kelola produk, pantau persediaan, dan catat penjualan dengan alur kerja yang lebih rapi—langsung dari satu
+          dashboard.</p>
         <div class="feature-list">
-          <div class="feature"><div class="feature-icon">▦</div><strong>Data terpusat</strong><span>Produk tersimpan rapi</span></div>
-          <div class="feature"><div class="feature-icon">↗</div><strong>Stok terpantau</strong><span>Ketahui stok menipis</span></div>
-          <div class="feature"><div class="feature-icon">◷</div><strong>Transaksi cepat</strong><span>Riwayat mudah dilacak</span></div>
+          <div class="feature">
+            <div class="feature-icon">▦</div><strong>Data terpusat</strong><span>Produk tersimpan rapi</span>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">↗</div><strong>Stok terpantau</strong><span>Ketahui stok menipis</span>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">◷</div><strong>Transaksi cepat</strong><span>Riwayat mudah dilacak</span>
+          </div>
         </div>
       </div>
       <div class="hero-foot">OptiWare · Retail & Inventory Management</div>
@@ -40,96 +372,108 @@
     <main class="right">
       <div style="width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column">
         <div class="mobile-brand">
-          <div class="brand-mark"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg></div>
-          <div><div class="brand-name">OptiWare</div><div class="brand-sub">Retail operations</div></div>
+          <div class="brand-mark"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m3 10 9-7 9 7" />
+              <path d="M5 9v12h14V9M9 21v-7h6v7" />
+            </svg></div>
+          <div>
+            <div class="brand-name">OptiWare</div>
+            <div class="brand-sub">Retail operations</div>
+          </div>
         </div>
         <section class="login-card">
           <div class="card-overline" id="modeLabel">Welcome back</div>
           <h2 id="formTitle">Selamat datang.</h2>
           <p class="intro" id="formIntro">Masuk untuk melanjutkan ke dashboard operasional toko.</p>
           <form id="authForm">
-            <div class="field" id="nameField" hidden><label for="name">Nama admin</label><input id="name" name="name" type="text" autocomplete="name" placeholder="Nama lengkap"></div>
-            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="username" placeholder="admin@optiware.com" required></div>
-            <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Minimal 8 karakter" required></div>
-            <button class="primary" id="submitBtn" type="submit">Masuk ke dashboard <span aria-hidden="true">→</span></button>
+            <div class="field" id="nameField" hidden><label for="name">Nama admin</label><input id="name" name="name"
+                type="text" autocomplete="name" placeholder="Nama lengkap"></div>
+            <div class="field"><label for="email">Username</label><input id="email" name="username" type="text"
+                autocomplete="username" placeholder="admin" required></div>
+            <div class="field"><label for="password">Password</label><input id="password" name="password"
+                type="password" autocomplete="current-password" placeholder="Minimal 8 karakter" required></div>
+            <button class="primary" id="submitBtn" type="submit">Masuk ke dashboard <span
+                aria-hidden="true">→</span></button>
           </form>
           <div class="notice" id="notice" role="status"></div>
-          <div class="switch"><span id="switchText">Belum memiliki akun admin?</span> <button type="button" id="switchBtn">Buat akun awal</button></div>
+          <div class="switch"><span id="switchText">Belum memiliki akun admin?</span> <button type="button"
+              id="switchBtn">Buat akun awal</button></div>
           <div class="security"><span>▣</span> Akses dilindungi sesi login</div>
         </section>
       </div>
     </main>
   </div>
-<script>
-(() => {
-  const form = document.getElementById('authForm');
-  const nameField = document.getElementById('nameField');
-  const nameInput = document.getElementById('name');
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-  const submitBtn = document.getElementById('submitBtn');
-  const switchBtn = document.getElementById('switchBtn');
-  const notice = document.getElementById('notice');
-  let setupMode = false;
-  let allowedToRegister = false;
+  <script>
+    (() => {
+      const form = document.getElementById('authForm');
+      const nameField = document.getElementById('nameField');
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const submitBtn = document.getElementById('submitBtn');
+      const switchBtn = document.getElementById('switchBtn');
+      const notice = document.getElementById('notice');
+      let setupMode = false;
+      let allowedToRegister = false;
 
-  function showNotice(message, type='error') {
-    notice.textContent = message;
-    notice.className = `notice ${type}`;
-  }
-  function clearNotice() { notice.textContent = ''; notice.className = 'notice'; }
-  function setMode(isSetup) {
-    setupMode = isSetup;
-    nameField.hidden = !isSetup;
-    nameInput.required = isSetup;
-    document.getElementById('modeLabel').textContent = isSetup ? 'Initial setup' : 'Welcome back';
-    document.getElementById('formTitle').textContent = isSetup ? 'Buat akun admin.' : 'Selamat datang.';
-    document.getElementById('formIntro').textContent = isSetup ? 'Buat akun admin pertama untuk mengamankan dashboard OptiWare.' : 'Masuk untuk melanjutkan ke dashboard operasional toko.';
-    submitBtn.innerHTML = isSetup ? 'Buat akun & lanjutkan →' : 'Masuk ke dashboard →';
-    document.getElementById('switchText').textContent = isSetup ? 'Sudah memiliki akun?' : 'Belum memiliki akun admin?';
-    switchBtn.textContent = isSetup ? 'Kembali ke login' : 'Buat akun awal';
-    switchBtn.style.display = allowedToRegister ? 'inline-block' : 'none';
-    passwordInput.autocomplete = isSetup ? 'new-password' : 'current-password';
-    clearNotice();
-  }
-  async function checkSetup() {
-    try {
-      const response = await fetch('/api/setup-status');
-      const body = await response.json();
-      if (!response.ok) throw new Error(body.message || 'Koneksi database belum siap.');
-      allowedToRegister = body.needsSetup;
-      setMode(allowedToRegister);
-      if (allowedToRegister) showNotice('Belum ada akun. Silakan buat akun admin pertama.', 'success');
-    } catch (error) {
-      allowedToRegister = false;
-      setMode(false);
-      showNotice(error.message || 'Tidak dapat memeriksa koneksi database.');
-    }
-  }
-  switchBtn.addEventListener('click', () => {
-    if (!allowedToRegister) return;
-    setMode(!setupMode);
-  });
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault(); clearNotice(); submitBtn.disabled = true; submitBtn.textContent = 'Memproses...';
-    const payload = { email: emailInput.value.trim(), password: passwordInput.value };
-    if (setupMode) payload.name = nameInput.value.trim();
-    try {
-      const response = await fetch(setupMode ? '/api/register' : '/api/login', {
-        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)
+      function showNotice(message, type = 'error') {
+        notice.textContent = message;
+        notice.className = `notice ${type}`;
+      }
+      function clearNotice() { notice.textContent = ''; notice.className = 'notice'; }
+      function setMode(isSetup) {
+        setupMode = isSetup;
+        nameField.hidden = !isSetup;
+        nameInput.required = isSetup;
+        document.getElementById('modeLabel').textContent = isSetup ? 'Initial setup' : 'Welcome back';
+        document.getElementById('formTitle').textContent = isSetup ? 'Buat akun admin.' : 'Selamat datang.';
+        document.getElementById('formIntro').textContent = isSetup ? 'Buat akun admin pertama untuk mengamankan dashboard OptiWare.' : 'Masuk untuk melanjutkan ke dashboard operasional toko.';
+        submitBtn.innerHTML = isSetup ? 'Buat akun & lanjutkan →' : 'Masuk ke dashboard →';
+        document.getElementById('switchText').textContent = isSetup ? 'Sudah memiliki akun?' : 'Belum memiliki akun admin?';
+        switchBtn.textContent = isSetup ? 'Kembali ke login' : 'Buat akun awal';
+        switchBtn.style.display = allowedToRegister ? 'inline-block' : 'none';
+        passwordInput.autocomplete = isSetup ? 'new-password' : 'current-password';
+        clearNotice();
+      }
+      async function checkSetup() {
+        try {
+          const response = await fetch('/api/setup-status');
+          const body = await response.json();
+          if (!response.ok) throw new Error(body.pesan || 'Koneksi database belum siap.');
+          allowedToRegister = body.needsSetup;
+          setMode(allowedToRegister);
+          if (allowedToRegister) showNotice('Belum ada akun. Silakan buat akun admin pertama.', 'success');
+        } catch (error) {
+          allowedToRegister = false;
+          setMode(false);
+          showNotice(error.message || 'Tidak dapat memeriksa koneksi database.');
+        }
+      }
+      switchBtn.addEventListener('click', () => {
+        if (!allowedToRegister) return;
+        setMode(!setupMode);
       });
-      const body = await response.json();
-      if (!response.ok) throw new Error(body.message || 'Permintaan gagal.');
-      window.location.href = '/dashboard';
-    } catch (error) {
-      showNotice(error.message || 'Ada kendala saat masuk.');
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = setupMode ? 'Buat akun & lanjutkan →' : 'Masuk ke dashboard →';
-    }
-  });
-  checkSetup();
-})();
-</script>
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault(); clearNotice(); submitBtn.disabled = true; submitBtn.textContent = 'Memproses...';
+        const payload = { username: emailInput.value.trim(), password: passwordInput.value };
+        try {
+          const response = await fetch(setupMode ? '/api/register' : '/api/login', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+          });
+          const body = await response.json();
+          if (!response.ok) throw new Error(body.pesan || 'Permintaan gagal.');
+          window.location.href = '/index.html';
+        } catch (error) {
+          showNotice(error.message || 'Ada kendala saat masuk.');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = setupMode ? 'Buat akun & lanjutkan →' : 'Masuk ke dashboard →';
+        }
+      });
+      checkSetup();
+    })();
+  </script>
 </body>
+
 </html>

@@ -1,0 +1,15 @@
+# Rahasia
+.env
+_env
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Editor dan sistem
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
