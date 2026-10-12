@@ -1,7 +1,7 @@
 import os
 import re
 from io import BytesIO
-from flask import Flask, request, jsonify, session, send_file, send_from_directory
+from flask import Flask, request, jsonify, session, send_file
 from flask_cors import CORS
 from pymongo import MongoClient
 from bson import ObjectId
@@ -12,8 +12,7 @@ from openpyxl import Workbook
 from dotenv import load_dotenv
 
 load_dotenv()
-BASE = os.path.dirname(os.path.abspath(__file__))
-app = Flask(__name__, static_folder=None)
+app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "rahasia-sementara")
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True   
@@ -25,7 +24,7 @@ alamat_frontend = os.environ.get("FRONTEND_URL", "http://localhost:3000").split(
 CORS(app, supports_credentials=True, origins=alamat_frontend)
 
 alamat_mongo = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
-client = MongoClient(alamat_mongo)
+client = MongoClient("mongodb+srv://672024016_db_user:672024016@cluster0.uzpexpn.mongodb.net/?appName=Cluster0")
 db = client["db_ritel"] 
 tabel_user = db["users"]
 tabel_barang = db["barang"]    
@@ -82,24 +81,10 @@ def catat_riwayat(barang_id, nama_barang, jenis, jumlah, catatan):
 
 @app.route("/")
 def beranda():
-    return send_from_directory(BASE, "login.html")
-
-@app.route("/<path:nama>")
-def file_statis(nama):
-    if nama.endswith(".html") or nama.startswith("assets/"):
-        return send_from_directory(BASE, nama)
-    return jsonify({"pesan": "Tidak ditemukan"}), 404
-
-# Endpoint yang dicari login.html
-@app.route("/api/setup-status", methods=["GET"])
-def setup_status():
-    return jsonify({"needsSetup": tabel_user.count_documents({}) == 0})
+    return jsonify({"pesan": "API jalan"})
 
 @app.route("/api/register", methods=["POST"])
 def register():
-    if tabel_user.count_documents({}) > 0:
-        return jsonify({"pesan": "Registrasi ditutup"}), 403
-    
     data = request.get_json() or {}
     username = (data.get("username") or "").strip()
     password = data.get("password") or ""
@@ -163,7 +148,7 @@ def daftar_barang():
 
     filter_cari = {}
     if kata_cari != "":
-        filter_cari["nama"] = {"$regex" : re.escape(kata_cari), "$options" : "i"}
+        filter_cari["nama"] = {"$reges" : re.escape(kata_cari), "$options" : "i"}
     if kategori != "":
         filter_cari["kategori"] = kategori
 
