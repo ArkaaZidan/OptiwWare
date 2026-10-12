@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaksi Penjualan - OptiWare</title>
+    
+    <!-- Webix CSS -->
+    <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css">
+    
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts untuk tipografi Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Base CSS (dari dashboard) -->
+    <link rel="stylesheet" href="assets/css/universal.css">
+    
+    <!-- Custom CSS terpisah khusus Halaman Transaksi -->
+    <link rel="stylesheet" href="assets/css/transaksi.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- SIDEBAR (Transaksi Aktif) -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="assets/images/logo-optiware.png" alt="OptiWare Logo" class="logo-image">
+                <h2>OptiWare</h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="produk.html" class="nav-item">
+                    <i class="fa-solid fa-box-open"></i>
+                    <span>Produk</span>
+                </a>
+                <a href="stok-gudang.html" class="nav-item">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <span>Stok Gudang</span>
+                </a>
+                <a href="transaksi.html" class="nav-item active">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Transaksi</span>
+                </a>
+                <a href="laporan.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Laporan</span>
+                </a>
+                <a href="pengaturan.html" class="nav-item">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Pengaturan</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="#" class="nav-item" id="sidebar-logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Keluar</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="topbar-search-transaksi" placeholder="Cari no faktur/invoice, nama pelanggan, kasir...">
+                </div>
+                
+                <div class="topbar-right">
+                    <div class="notification" id="topbar-notif-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge-dot">3</span>
+                    </div>
+                    <div class="user-profile" id="topbar-profile-btn">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <span class="user-name">Admin</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-muted"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Transaksi & Kasir Penjualan</h1>
+                    <p class="page-subtitle">Kelola riwayat penjualan ritel, kasir POS, bukti struk, dan status pembayaran</p>
+                </div>
+                <div class="header-buttons">
+                    <button type="button" class="btn-outline" id="btn-export-transaksi">
+                        <i class="fa-solid fa-file-excel"></i> Export Excel
+                    </button>
+                    <button type="button" class="btn-primary" id="btn-transaksi-baru">
+                        <i class="fa-solid fa-cash-register"></i> + Transaksi Baru (Kasir POS)
+                    </button>
+                </div>
+            </div>
+
+            <!-- TRANSACTION STATS CARDS -->
+            <div class="stats-grid transaksi-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <div class="stat-details">
+                        <p class="stat-title">Total Penjualan</p>
+                        <h3 class="stat-value" id="stat-omset">Rp 12.450.000</h3>
+                        <p class="stat-trend trend-up"><i class="fa-solid fa-arrow-trend-up"></i> 12% dari bulan lalu</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-trx"><i class="fa-solid fa-receipt"></i></div>
+                    <div class="stat-details">
+                        <p class="stat-title">Jumlah Transaksi</p>
+                        <h3 class="stat-value" id="stat-total-trx">86</h3>
+                        <p class="stat-trend trend-up"><i class="fa-solid fa-arrow-trend-up"></i> 18% dari bulan lalu</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-success"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="stat-details">
+                        <p class="stat-title">Transaksi Lunas</p>
+                        <h3 class="stat-value" id="stat-lunas">84</h3>
+                        <p class="stat-trend trend-up"><i class="fa-solid fa-check-double"></i> 97.6% tingkat sukses</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-warn"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <div class="stat-details">
+                        <p class="stat-title">Menunggu / Pending</p>
+                        <h3 class="stat-value" id="stat-pending">2</h3>
+                        <p class="stat-trend trend-warn"><i class="fa-solid fa-hourglass-half"></i> Konfirmasi pembayaran</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILTER TOOLBAR CARD -->
+            <div class="filter-card">
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label for="filter-status-trx"><i class="fa-solid fa-filter"></i> Status Bayar:</label>
+                        <select id="filter-status-trx" class="filter-select">
+                            <option value="">Semua Status</option>
+                            <option value="Selesai">Selesai (Lunas)</option>
+                            <option value="Pending">Menunggu Pembayaran</option>
+                            <option value="Batal">Dibatalkan</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="filter-metode-trx"><i class="fa-solid fa-credit-card"></i> Metode:</label>
+                        <select id="filter-metode-trx" class="filter-select">
+                            <option value="">Semua Metode</option>
+                            <option value="Tunai">Tunai (Cash)</option>
+                            <option value="QRIS">QRIS</option>
+                            <option value="Transfer Bank">Transfer Bank</option>
+                            <option value="Kartu Debit">Kartu Debit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button type="button" class="btn-secondary-sm" id="btn-reset-trx-filter">
+                        <i class="fa-solid fa-rotate-left"></i> Reset Filter
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABLE SECTION -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h2>Riwayat Transaksi Penjualan</h2>
+                    <span class="product-count-label" id="trx-count-info">Memuat data transaksi...</span>
+                </div>
+                <div class="table-responsive">
+                    <div id="transaksi-table-container"></div>
+                </div>
+                <div id="transaksi-pager-container" class="pager-wrapper"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Webix JS Library -->
+    <script src="https://cdn.webix.com/edge/webix.js"></script>
+    
+    <!-- Custom Transaksi JS terpisah -->
+    <script src="assets/js/transaksi.js"></script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan Sistem - OptiWare</title>
+    
+    <!-- Webix CSS -->
+    <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css">
+    
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts untuk tipografi Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Base CSS (dari dashboard) -->
+    <link rel="stylesheet" href="assets/css/universal.css">
+    
+    <!-- Custom CSS terpisah khusus Halaman Pengaturan -->
+    <link rel="stylesheet" href="assets/css/pengaturan.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- SIDEBAR (Pengaturan Aktif) -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="assets/images/logo-optiware.png" alt="OptiWare Logo" class="logo-image">
+                <h2>OptiWare</h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="produk.html" class="nav-item">
+                    <i class="fa-solid fa-box-open"></i>
+                    <span>Produk</span>
+                </a>
+                <a href="stok-gudang.html" class="nav-item">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <span>Stok Gudang</span>
+                </a>
+                <a href="transaksi.html" class="nav-item">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Transaksi</span>
+                </a>
+                <a href="laporan.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Laporan</span>
+                </a>
+                <a href="pengaturan.html" class="nav-item active">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Pengaturan</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="#" class="nav-item" id="sidebar-logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Keluar</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="topbar-search-settings" placeholder="Cari pengaturan, nama toko, hak akses...">
+                </div>
+                
+                <div class="topbar-right">
+                    <div class="notification" id="topbar-notif-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge-dot">3</span>
+                    </div>
+                    <div class="user-profile" id="topbar-profile-btn">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <span class="user-name">Admin</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-muted"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Pengaturan Sistem & Usaha</h1>
+                    <p class="page-subtitle">Konfigurasi profil toko ritel, staf & kasir, parameter inventaris, dan pencadangan data</p>
+                </div>
+                <div class="header-buttons">
+                    <button type="button" class="btn-outline" id="btn-reset-default-settings">
+                        <i class="fa-solid fa-rotate-left"></i> Reset Standar
+                    </button>
+                    <button type="button" class="btn-primary" id="btn-save-settings">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan
+                    </button>
+                </div>
+            </div>
+
+            <!-- SETTINGS TABS NAVIGATION -->
+            <div class="settings-tabs">
+                <div class="settings-tab active" data-tab="store">
+                    <i class="fa-solid fa-store"></i>
+                    <span>Profil Toko & Ritel</span>
+                </div>
+                <div class="settings-tab" data-tab="users">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>Pengguna & Staf</span>
+                </div>
+                <div class="settings-tab" data-tab="pos">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>POS & Inventaris</span>
+                </div>
+                <div class="settings-tab" data-tab="backup">
+                    <i class="fa-solid fa-database"></i>
+                    <span>Cadangan & Reset</span>
+                </div>
+            </div>
+
+            <!-- TAB 1: PROFIL TOKO & RITEL -->
+            <div class="settings-section-card" id="tab-content-store">
+                <div class="section-title-box">
+                    <h2><i class="fa-solid fa-store"></i> Identitas Toko & Informasi Resmi</h2>
+                    <p>Informasi ini akan tercetak pada kop faktur, struk kasir, dan laporan berkala.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="store-name">Nama Usaha / Toko Ritel <span class="text-danger">*</span></label>
+                        <input type="text" id="store-name" class="settings-input" value="OptiWare Ritel & Gudang">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="store-tagline">Slogan / Tagline</label>
+                        <input type="text" id="store-tagline" class="settings-input" value="Solusi Manajemen Inventaris & Ritel Modern">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="store-address">Alamat Lengkap Operasional</label>
+                        <input type="text" id="store-address" class="settings-input" value="Jl. Logistik Niaga Modern No. 45, Sentra Pergudangan, Jakarta Barat">
+                    </div>
+                    <div class="form-group">
+                        <label for="store-phone">Nomor Telepon / WhatsApp</label>
+                        <input type="text" id="store-phone" class="settings-input" value="(021) 555-8900 / 0812-9876-5432">
+                    </div>
+                    <div class="form-group">
+                        <label for="store-email">Email Operasional Toko</label>
+                        <input type="email" id="store-email" class="settings-input" value="kontak@optiware-store.co.id">
+                    </div>
+                    <div class="form-group">
+                        <label for="store-npwp">Nomor Pokok Wajib Pajak (NPWP)</label>
+                        <input type="text" id="store-npwp" class="settings-input" value="09.876.543.2-123.000">
+                    </div>
+                    <div class="form-group">
+                        <label for="store-currency">Mata Uang Default</label>
+                        <select id="store-currency" class="settings-select">
+                            <option value="IDR" selected>IDR - Rupiah Indonesia (Rp)</option>
+                            <option value="USD">USD - US Dollar ($)</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="store-receipt-footer">Catatan Kaki Struk Kasir (Receipt Footer)</label>
+                        <textarea id="store-receipt-footer" class="settings-textarea" rows="3">Terima kasih telah berbelanja di OptiWare!
+Barang yang sudah dibeli dapat ditukar maksimal 2x24 jam dengan membawa struk ini.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MANAJEMEN PENGGUNA & STAF -->
+            <div class="settings-section-card" id="tab-content-users" style="display: none;">
+                <div class="section-title-box flex-between">
+                    <div>
+                        <h2><i class="fa-solid fa-users-gear"></i> Manajemen Staf & Hak Akses</h2>
+                        <p>Kelola akun pengguna, peran otorisasi, dan status staf kasir atau gudang.</p>
+                    </div>
+                    <button type="button" class="btn-primary-sm" id="btn-tambah-user">
+                        <i class="fa-solid fa-user-plus"></i> + Tambah Pengguna
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <div id="users-table-container"></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: POS & INVENTARIS PREFERENCES -->
+            <div class="settings-section-card" id="tab-content-pos" style="display: none;">
+                <div class="section-title-box">
+                    <h2><i class="fa-solid fa-receipt"></i> Parameter Transaksi & Notifikasi Stok</h2>
+                    <p>Atur ambang batas peringatan stok menipis, tarif pajak, dan format nomor faktur otomatis.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="stock-min-threshold">Ambang Batas Peringatan Stok Menipis (Unit)</label>
+                        <input type="number" id="stock-min-threshold" class="settings-input" value="15">
+                        <small class="form-hint">Produk dengan stok di bawah angka ini akan berstatus "Hampir Habis".</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="tax-rate">Tarif Pajak PPN (%)</label>
+                        <input type="number" id="tax-rate" class="settings-input" value="11">
+                        <small class="form-hint">Besaran tarif pajak pertambahan nilai yang diterapkan.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice-prefix">Format Prefix Nomor Faktur</label>
+                        <input type="text" id="invoice-prefix" class="settings-input" value="TRX-2026-">
+                        <small class="form-hint">Penomoran transaksi berurutan otomatis (misal: TRX-2026-0087).</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="auto-print">Cetak Struk Otomatis Setelah Bayar</label>
+                        <select id="auto-print" class="settings-select">
+                            <option value="yes" selected>Ya - Langsung Buka Dialog Cetak</option>
+                            <option value="no">Tidak - Hanya Tampilkan Pratinjau</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="notify-low-stock" checked>
+                            <span class="checkmark"></span>
+                            <span>Aktifkan notifikasi lonceng otomatis saat produk mencapai batas menipis</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: CADANGAN & RESET DATA (BACKUP & RESTORE) -->
+            <div class="settings-section-card" id="tab-content-backup" style="display: none;">
+                <div class="section-title-box">
+                    <h2><i class="fa-solid fa-database"></i> Cadangan & Pemulihan Basis Data (Backup & Restore)</h2>
+                    <p>Simpan salinan cadangan data produk, inventaris rak, dan transaksi ke file JSON lokal.</p>
+                </div>
+
+                <div class="backup-cards-grid">
+                    <div class="backup-card">
+                        <div class="backup-icon"><i class="fa-solid fa-file-arrow-down"></i></div>
+                        <div class="backup-info">
+                            <h3>Unduh Cadangan Database (Export)</h3>
+                            <p>Unduh file cadangan JSON lengkap yang mencakup data produk, mutasi gudang, dan transaksi.</p>
+                            <button type="button" class="btn-primary" id="btn-export-backup" style="margin-top: 10px;">
+                                <i class="fa-solid fa-download"></i> Unduh File Backup JSON
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="backup-card">
+                        <div class="backup-icon icon-restore"><i class="fa-solid fa-file-arrow-up"></i></div>
+                        <div class="backup-info">
+                            <h3>Pulihkan dari File Backup (Import)</h3>
+                            <p>Unggah file JSON cadangan untuk memulihkan seluruh data aplikasi OptiWare.</p>
+                            <input type="file" id="input-restore-file" accept=".json" style="display: none;">
+                            <button type="button" class="btn-outline" id="btn-trigger-restore" style="margin-top: 10px;">
+                                <i class="fa-solid fa-upload"></i> Pilih File Backup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="danger-zone-box">
+                    <div class="danger-title">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>Zona Bahaya: Reset Database Demo</span>
+                    </div>
+                    <p>Tindakan ini akan menghapus semua perubahan lokal dan mengembalikan database produk, transaksi, serta mutasi stok ke data awal (default).</p>
+                    <button type="button" class="btn-danger" id="btn-reset-database">
+                        <i class="fa-solid fa-trash-can"></i> Reset Seluruh Data ke Default
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Webix JS Library -->
+    <script src="https://cdn.webix.com/edge/webix.js"></script>
+    
+    <!-- Custom Pengaturan JS terpisah -->
+    <script src="assets/js/pengaturan.js"></script>
+</body>
+</html>

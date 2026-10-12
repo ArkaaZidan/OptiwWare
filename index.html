@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Gudang - OptiWare</title>
+
+    <!-- Webix CSS -->
+    <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css">
+
+    <!-- Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts untuk tipografi yang modern mirip mockup -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/universal.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="assets/images/logo-optiware.png" alt="OptiWare Logo" class="logo-image">
+                <h2>OptiWare</h2>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-item active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="produk.html" class="nav-item">
+                    <i class="fa-solid fa-box-open"></i>
+                    <span>Produk</span>
+                </a>
+                <a href="stok-gudang.html" class="nav-item">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <span>Stok Gudang</span>
+                </a>
+                <a href="transaksi.html" class="nav-item">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Transaksi</span>
+                </a>
+                <a href="laporan.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Laporan</span>
+                </a>
+                <a href="pengaturan.html" class="nav-item">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Pengaturan</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="login.html" class="nav-item">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Keluar</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Cari produk, transaksi, atau menu...">
+                </div>
+
+                <div class="topbar-right">
+                    <div class="notification">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge-dot">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <div class="avatar">A</div>
+                        <div class="user-info">
+                            <span class="user-name">Admin</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-muted"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Ringkasan data ritel dan gudang OptiWare</p>
+                </div>
+                <div class="date-picker">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span>1 - 31 Oktober 2026</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+            </div>
+
+            <!-- STATS CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <div class="stat-details">
+                        <p class="stat-title">Total Penjualan</p>
+                        <h3 class="stat-value">Rp 12.450.000</h3>
+                        <p class="stat-trend trend-up"><i class="fa-solid fa-arrow-trend-up"></i> 12% dari bulan lalu</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
+                    <div class="stat-details">
+                        <p class="stat-title">Total Produk</p>
+                        <h3 class="stat-value">124</h3>
+                        <p class="stat-trend trend-up"><i class="fa-solid fa-plus"></i> 8 produk baru</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-warehouse"></i></div>
+                    <div class="stat-details">
+                        <p class="stat-title">Total Stok</p>
+                        <h3 class="stat-value">1.560</h3>
+                        <p class="stat-trend trend-warn"><i class="fa-solid fa-triangle-exclamation"></i> 3 produk hampir habis</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-user-group"></i></div>
+                    <div class="stat-details">
+                        <p class="stat-title">Jumlah Transaksi</p>
+                        <h3 class="stat-value">86</h3>
+                        <p class="stat-trend trend-up"><i class="fa-solid fa-arrow-trend-up"></i> 18% dari bulan lalu</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECENT PRODUCTS TABLE -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h2>Stok Produk Terbaru</h2>
+                    <div class="table-actions">
+                        <button type="button" class="btn-primary-sm" id="btn-tambah-produk">
+                            <i class="fa-solid fa-plus"></i> Tambah Produk
+                        </button>
+                        <a href="produk.html" class="link-orange" id="btn-lihat-semua">Lihat Semua</a>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <div id="table-container"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Webix JS Library -->
+    <script src="https://cdn.webix.com/edge/webix.js"></script>
+
+    <!-- Custom Application JS -->
+    <script src="assets/js/index.js"></script>
+</body>
+</html>
