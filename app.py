@@ -1,12 +1,10 @@
 import os
 import time
-from io import BytesIO
-from datetime import datetime, timedelta
+from datetime import datetime
 from functools import wraps
 
 from dotenv import load_dotenv
-from openpyxl import Workbook
-from flask import Flask, request, jsonify, session, send_from_directory, send_file, redirect
+from flask import Flask, request, jsonify, session, send_from_directory, redirect
 from flask_cors import CORS
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
@@ -26,18 +24,9 @@ CONTOH_SECRET = ["isi-string-acak-panjang", "isi-dengan-teks-acak-yang-panjang",
 if not app.secret_key or app.secret_key in CONTOH_SECRET:
     raise RuntimeError("SECRET_KEY belum diatur (isi di .env atau Environment Variables Vercel).")
 
-# Berjalan di Vercel? (Vercel mengisi variabel VERCEL otomatis dan selalu memakai HTTPS)
-DI_VERCEL = bool(os.environ.get("VERCEL"))
-
-app.config["SESSION_COOKIE_HTTPONLY"] = True      # cookie tidak bisa dibaca JavaScript
+app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = os.environ.get("COOKIE_SAMESITE", "Lax")
-# Di Vercel cookie WAJIB Secure (hanya dikirim lewat HTTPS). Di laptop (http://localhost) boleh false.
-app.config["SESSION_COOKIE_SECURE"] = DI_VERCEL or os.environ.get("COOKIE_SECURE", "false") == "true"
-
-# Sesi berakhir kalau tidak ada aktivitas selama 5 menit (bisa diubah lewat SESSION_MENIT di .env).
-# Setiap permintaan ke server memperpanjang sesi lagi (sliding), jadi 5 menit dihitung dari aktivitas terakhir.
-SESSION_MENIT = int(os.environ.get("SESSION_MENIT", "1") or 1)
-app.permanent_session_lifetime = timedelta(minutes=SESSION_MENIT)
+app.config["SESSION_COOKIE_SECURE"] = os.environ.get("COOKIE_SECURE", "false") == "true"
 
 alamat_frontend = os.environ.get("FRONTEND_URL", "http://localhost:3000").split(",")
 CORS(app, supports_credentials=True, origins=alamat_frontend)
@@ -76,37 +65,6 @@ def login_required(fungsi):
             return redirect("/")
         return fungsi(*args, **kwargs)
     return pembungkus
-
-
-# ---------- keamanan: HTTPS dan header ----------
-def lewat_https():
-    return request.is_secure or request.headers.get("X-Forwarded-Proto", "").lower() == "https"
-
-
-@app.before_request
-def paksa_https():
-    # Di Vercel, alamat http:// dialihkan ke https:// supaya cookie login tidak terkirim polos
-    if DI_VERCEL and not lewat_https():
-        return redirect(request.url.replace("http://", "https://", 1), code=301)
-
-
-@app.after_request
-def pasang_header_keamanan(jawaban):
-    jawaban.headers["X-Content-Type-Options"] = "nosniff"                 # browser tidak menebak tipe file
-    jawaban.headers["X-Frame-Options"] = "DENY"                          # halaman tidak boleh ditanam di iframe situs lain
-    jawaban.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    if lewat_https():
-        jawaban.headers["Strict-Transport-Security"] = "max-age=31536000"   # browser selalu pakai HTTPS
-    if request.path.startswith("/api/"):
-        jawaban.headers["Cache-Control"] = "no-store"                    # jawaban API tidak disimpan cache
-    return jawaban
-
-
-# dipanggil frontend saat pengguna aktif, supaya sesi tidak habis ketika bekerja tanpa menyimpan
-@app.route("/api/ping")
-@login_required
-def ping():
-    return jsonify({"ok": True, "sesiMenit": SESSION_MENIT})
 
 
 # halaman login (kalau sudah login langsung ke dashboard)
@@ -149,9 +107,7 @@ def halaman_frontend(nama_file):
         return jsonify({"pesan": "Halaman tidak ditemukan"}), 404
     if "user_id" not in session:
         return redirect("/")
-    jawaban = send_from_directory(FOLDER, nama_file)
-    jawaban.headers["Cache-Control"] = "no-store"
-    return jawaban
+    return send_from_directory(FOLDER, nama_file)
 
 
 # cek apakah belum ada akun (login.html menampilkan form buat akun admin)
@@ -196,7 +152,6 @@ def register():
     })
 
     session.clear()
-    session.permanent = True      # supaya batas 5 menit berlaku
     session["user_id"] = str(hasil.inserted_id)
     session["username"] = username
     session["role"] = "Administrator"
@@ -216,7 +171,6 @@ def login():
         return jsonify({"pesan": "Username atau password salah"}), 401
 
     session.clear()
-    session.permanent = True      # supaya batas 5 menit berlaku
     session["user_id"] = str(user["_id"])
     session["username"] = user["username"]
     session["role"] = user.get("role", "Administrator")
@@ -528,46 +482,6 @@ def simpan_sinkronisasi(nama):
         return jsonify({"pesan": "Jenis data tidak dikenal"}), 404
 
     return jsonify({"pesan": "Tersimpan"})
-
-
-# unduh data sebagai file Excel (3 sheet: Barang, Riwayat Stok, Penjualan)
-@app.route("/api/export/excel", methods=["GET"])
-@login_required
-def export_excel():
-    for tabel in (tabel_barang, tabel_transaksi, tabel_riwayat):
-        beri_nomor(tabel)
-
-    wb = Workbook()
-    sheet = wb.active
-    sheet.title = "Barang"
-    sheet.append(["No", "Kode", "Nama", "Kategori", "Stok", "Satuan", "Harga Beli", "Harga Jual", "Total Nilai", "Rak", "Supplier"])
-    for b in tabel_barang.find().sort("nama", 1):
-        p = barang_ke_halaman(b)
-        sheet.append([p["id"], p["kode"], p["nama"], p["kategori"], p["stok"], p["satuan"],
-                      p["hargaBeli"], p["hargaJual"], p["stok"] * p["hargaJual"], p["rak"], p["supplier"]])
-
-    sheet2 = wb.create_sheet("Riwayat Stok")
-    sheet2.append(["Waktu", "Jenis", "Barang", "Jumlah", "Keterangan", "Referensi"])
-    for r in tabel_riwayat.find().sort("dibuat", -1):
-        l = log_ke_halaman(r)
-        sheet2.append([l["waktu"], l["label"], l["nama"], l["qty"], l["alur"], l["ref"]])
-
-    sheet3 = wb.create_sheet("Penjualan")
-    sheet3.append(["Waktu", "Faktur", "Pelanggan", "Metode", "Status", "Barang", "Total", "Kasir"])
-    for t in tabel_transaksi.find().sort("dibuat", -1):
-        x = transaksi_ke_halaman(t)
-        barang = ", ".join("%s (%sx)" % (i.get("nama", ""), i.get("qty", 0)) for i in x["items"])
-        sheet3.append([x["waktu"], x["invoice"], x["pelanggan"], x["metode"], x["status"], barang, x["total"], x["kasir"]])
-
-    isi_file = BytesIO()
-    wb.save(isi_file)
-    isi_file.seek(0)
-    return send_file(
-        isi_file,
-        as_attachment=True,
-        download_name="inventaris_" + datetime.now().strftime("%Y%m%d_%H%M") + ".xlsx",
-        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    )
 
 
 if __name__ == "__main__":
