@@ -264,12 +264,11 @@
       color: var(--text-muted)
     }
 
-    .switch button {
+    .switch a {
       border: 0;
       background: none;
       color: #107349;
       font-weight: 800;
-      cursor: pointer;
       padding: 4px
     }
 
@@ -286,12 +285,6 @@
       display: block;
       background: #fff0ef;
       color: #a32c28
-    }
-
-    .notice.success {
-      display: block;
-      background: #e9faf6;
-      color: #087665
     }
 
     .security {
@@ -369,8 +362,6 @@
           <h2 id="formTitle">Silakan masuk</h2>
           <p class="intro" id="formIntro">Masukkan username dan password untuk melanjutkan.</p>
           <form id="authForm">
-            <div class="field" id="nameField" hidden><label for="name">Nama admin</label><input id="name" name="name"
-                type="text" autocomplete="name" placeholder="Nama lengkap"></div>
             <div class="field"><label for="email">Username</label><input id="email" name="username" type="text"
                 autocomplete="username" placeholder="admin" required></div>
             <div class="field"><label for="password">Password</label><input id="password" name="password"
@@ -379,8 +370,7 @@
                 aria-hidden="true">→</span></button>
           </form>
           <div class="notice" id="notice" role="status"></div>
-          <div class="switch"><span id="switchText">Belum memiliki akun?</span> <button type="button"
-              id="switchBtn">Buat akun admin</button></div>
+          <div class="switch" id="registerSwitch" hidden>Belum memiliki akun? <a href="/register">Daftar di sini</a></div>
           <div class="security"><span>▣</span> Gunakan akun admin untuk masuk</div>
         </section>
       </div>
@@ -389,58 +379,32 @@
   <script>
     (() => {
       const form = document.getElementById('authForm');
-      const nameField = document.getElementById('nameField');
-      const nameInput = document.getElementById('name');
       const emailInput = document.getElementById('email');
       const passwordInput = document.getElementById('password');
       const submitBtn = document.getElementById('submitBtn');
-      const switchBtn = document.getElementById('switchBtn');
+      const registerSwitch = document.getElementById('registerSwitch');
       const notice = document.getElementById('notice');
-      let setupMode = false;
-      let allowedToRegister = false;
 
       function showNotice(message, type = 'error') {
         notice.textContent = message;
         notice.className = `notice ${type}`;
       }
       function clearNotice() { notice.textContent = ''; notice.className = 'notice'; }
-      function setMode(isSetup) {
-        setupMode = isSetup;
-        nameField.hidden = !isSetup;
-        nameInput.required = isSetup;
-        document.getElementById('modeLabel').textContent = isSetup ? 'Buat akun' : 'Masuk akun';
-        document.getElementById('formTitle').textContent = isSetup ? 'Buat akun admin' : 'Silakan masuk';
-        document.getElementById('formIntro').textContent = isSetup ? 'Buat akun admin untuk mulai menggunakan OptiWare.' : 'Masukkan username dan password untuk melanjutkan.';
-        submitBtn.innerHTML = isSetup ? 'Buat akun dan masuk' : 'Masuk';
-        document.getElementById('switchText').textContent = isSetup ? 'Sudah memiliki akun?' : 'Belum memiliki akun?';
-        switchBtn.textContent = isSetup ? 'Kembali ke login' : 'Buat akun admin';
-        switchBtn.style.display = allowedToRegister ? 'inline-block' : 'none';
-        passwordInput.autocomplete = isSetup ? 'new-password' : 'current-password';
-        clearNotice();
-      }
       async function checkSetup() {
         try {
           const response = await fetch('/api/setup-status');
           const body = await response.json();
           if (!response.ok) throw new Error(body.pesan || 'Koneksi database belum siap.');
-          allowedToRegister = body.needsSetup;
-          setMode(allowedToRegister);
-          if (allowedToRegister) showNotice('Belum ada akun. Silakan buat akun admin.', 'success');
-        } catch (error) {
-          allowedToRegister = false;
-          setMode(false);
-          showNotice(error.message || 'Tidak dapat memeriksa koneksi database.');
+          registerSwitch.hidden = !body.needsSetup;
+        } catch (_) {
+          registerSwitch.hidden = true;
         }
       }
-      switchBtn.addEventListener('click', () => {
-        if (!allowedToRegister) return;
-        setMode(!setupMode);
-      });
       form.addEventListener('submit', async (event) => {
         event.preventDefault(); clearNotice(); submitBtn.disabled = true; submitBtn.textContent = 'Memproses...';
         const payload = { username: emailInput.value.trim(), password: passwordInput.value };
         try {
-          const response = await fetch(setupMode ? '/api/register' : '/api/login', {
+          const response = await fetch('/api/login', {
             method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
           });
           const body = await response.json();
@@ -450,7 +414,7 @@
           showNotice(error.message || 'Ada kendala saat masuk.');
         } finally {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = setupMode ? 'Buat akun dan masuk' : 'Masuk';
+          submitBtn.textContent = 'Masuk';
         }
       });
       checkSetup();

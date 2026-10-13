@@ -875,7 +875,7 @@ if (typeof webix === "undefined") {
             view: "popup",
             id: "notif_popup_gudang",
             width: 340,
-            css: "optiware-notif-popup",
+            css: "optiware-notif-popup optiware-notif-popup-gudang",
             body: {
                 rows: [
                     {
@@ -885,6 +885,7 @@ if (typeof webix === "undefined") {
                     {
                         view: "list",
                         autoheight: true,
+                        rowHeight: 88,
                         scroll: false,
                         template: `
                             <div class="notif-item">
@@ -918,7 +919,11 @@ if (typeof webix === "undefined") {
         });
 
         const notifBtn = document.getElementById("topbar-notif-btn");
-        if (notifBtn) notifBtn.addEventListener("click", function () { notifPopup.show(this); });
+        if (notifBtn) notifBtn.addEventListener("click", function () {
+            notifPopup.define("width", Math.max(1, Math.min(340, window.innerWidth - 24)));
+            notifPopup.resize();
+            notifPopup.show(this);
+        });
 
         const profilePopup = webix.ui({
             view: "popup",

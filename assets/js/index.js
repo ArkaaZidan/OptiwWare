@@ -159,6 +159,11 @@ if (typeof webix === "undefined") {
             if ($$("table_produk")) {
                 $$("table_produk").resize();
             }
+            if ($$("product_window")) {
+                $$("product_window").define("width", Math.max(220, Math.min(480, Math.floor(window.innerWidth * 0.8))));
+                $$("product_window").define("height", Math.max(280, Math.min(480, Math.floor(window.innerHeight * 0.8))));
+                $$("product_window").resize();
+            }
         });
 
         // ------------------------------------------------------------
@@ -173,6 +178,7 @@ if (typeof webix === "undefined") {
                 view: "list",
                 id: "action_list",
                 autoheight: true,
+                rowHeight: 44,
                 scroll: false,
                 template: "<i class='#icon#' style='width:18px; margin-right:8px;'></i> #text#",
                 data: [
@@ -280,11 +286,13 @@ if (typeof webix === "undefined") {
         const productWindow = webix.ui({
             view: "window",
             id: "product_window",
-            width: 480,
+            width: Math.max(220, Math.min(480, Math.floor(window.innerWidth * 0.8))),
+            height: Math.max(280, Math.min(480, Math.floor(window.innerHeight * 0.8))),
             position: "center",
             modal: true,
             head: {
                 view: "toolbar",
+                css: "product-window-toolbar",
                 cols: [
                     { view: "label", label: "Tambah Produk Baru", id: "product_window_title" },
                     { 
@@ -297,6 +305,8 @@ if (typeof webix === "undefined") {
             body: {
                 view: "form",
                 id: "product_form",
+                scroll: "y",
+                padding: 18,
                 elements: [
                     { 
                         view: "text", 
@@ -357,7 +367,8 @@ if (typeof webix === "undefined") {
                                 click: saveProductForm 
                             }
                         ]
-                    }
+                    },
+                    { height: 12 }
                 ]
             }
         });

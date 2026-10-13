@@ -371,6 +371,11 @@ if (typeof webix === "undefined") {
         // Responsif window resize
         webix.event(window, "resize", function () {
             if ($$("table_transaksi")) $$("table_transaksi").resize();
+            if ($$("pos_modal")) {
+                $$("pos_modal").define("width", Math.max(240, Math.min(720, window.innerWidth - 32)));
+                $$("pos_modal").define("height", Math.max(280, Math.min(640, window.innerHeight - 32)));
+                $$("pos_modal").resize();
+            }
         });
 
         // ------------------------------------------------------------
@@ -600,7 +605,8 @@ if (typeof webix === "undefined") {
         const posModal = webix.ui({
             view: "window",
             id: "pos_modal",
-            width: 720,
+            width: Math.max(240, Math.min(720, window.innerWidth - 32)),
+            height: Math.max(280, Math.min(640, window.innerHeight - 32)),
             position: "center",
             modal: true,
             head: {
@@ -612,6 +618,11 @@ if (typeof webix === "undefined") {
             },
             body: {
                 rows: [
+                    {
+                        view: "scrollview",
+                        scroll: "y",
+                        body: {
+                            rows: [
                     {
                         view: "form",
                         id: "pos_header_form",
@@ -734,9 +745,12 @@ if (typeof webix === "undefined") {
                             }
                         ]
                     },
+                            ]
+                        }
+                    },
                     {
                         margin: 12,
-                        padding: { top: 12 },
+                        padding: { top: 10, bottom: 16, left: 12, right: 12 },
                         cols: [
                             { view: "button", value: "Batal", css: "webix_secondary", click: function () { $$("pos_modal").hide(); } },
                             { 

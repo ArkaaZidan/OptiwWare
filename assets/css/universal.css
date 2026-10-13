@@ -508,6 +508,10 @@ th:last-child, td:last-child {
     padding: 6px 12px !important;
 }
 
+.webix_win_head .product-window-toolbar {
+    padding-right: 24px !important;
+}
+
 .webix_win_head .webix_el_label label {
     font-size: 16px !important;
     font-weight: 700 !important;
@@ -621,10 +625,18 @@ th:last-child, td:last-child {
 .optiware-notif-popup .notif-item {
     display: flex;
     gap: 12px;
-    align-items: flex-start;
+    align-items: center;
     padding: 10px 16px;
     border-bottom: 1px solid #f8fafc;
     transition: background-color 0.15s;
+}
+
+.optiware-notif-popup-gudang .notif-item {
+    box-sizing: border-box;
+    min-height: 76px;
+    margin: 6px 8px;
+    border: 1px solid #e8edf3;
+    border-radius: 10px;
 }
 
 .optiware-notif-popup .notif-item:hover {

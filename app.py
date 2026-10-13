@@ -75,6 +75,15 @@ def halaman_login():
     return send_from_directory(FOLDER, "login.html")
 
 
+@app.route("/register")
+def halaman_register():
+    if "user_id" in session:
+        return redirect("/dashboard")
+    if tabel_user.find_one({}) is not None:
+        return redirect("/")
+    return send_from_directory(FOLDER, "register.html")
+
+
 # halaman dashboard (index.html), hanya untuk yang sudah login
 @app.route("/dashboard")
 def halaman_dashboard():
@@ -144,17 +153,13 @@ def register():
 
     password_hash = generate_password_hash(password)
 
-    hasil = tabel_user.insert_one({
+    tabel_user.insert_one({
         "username": username,
         "password": password_hash,
         "role": "Administrator",
         "dibuat": datetime.now(),
     })
 
-    session.clear()
-    session["user_id"] = str(hasil.inserted_id)
-    session["username"] = username
-    session["role"] = "Administrator"
     return jsonify({"pesan": "Register berhasil"}), 201
 
 
