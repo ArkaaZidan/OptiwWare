@@ -67,7 +67,9 @@ def login_required(fungsi):
     @wraps(fungsi)
     def pembungkus(*args, **kwargs):
         if "user_id" not in session:
-            return jsonify({"pesan": "Silakan login dulu"}), 401
+            if request.path.startswith("/api/"):
+                return jsonify({"pesan": "Silakan login dulu"}), 401
+            return redirect("/")
         return fungsi(*args, **kwargs)
     return pembungkus
 
@@ -253,7 +255,7 @@ def register():
     if username == "" or password == "":
         return jsonify({"pesan": "Username dan password wajib diisi"}), 400
     if len(password) < 6:
-        return jsonify({"pesan": "Password minimal 6 karakter"}), 400
+        return jsonify({"pesan": "Password minimal 8 karakter"}), 400
     
     # cek username sudah dipakai atau belum
     if tabel_user.find_one({"username": username}):

@@ -1039,7 +1039,7 @@ if (typeof webix === "undefined") {
                                 ok: "Ya, Keluar",
                                 cancel: "Batal",
                                 callback: function (res) {
-                                    if (res) webix.message({ type: "info", text: "Anda telah keluar dari aplikasi" });
+                                    if (res) optiwareLogout();
                                 }
                             });
                         } else {
@@ -1068,7 +1068,7 @@ if (typeof webix === "undefined") {
                     ok: "Ya, Keluar",
                     cancel: "Batal",
                     callback: function (res) {
-                        if (res) webix.message({ type: "info", text: "Anda telah keluar dari aplikasi" });
+                        if (res) optiwareLogout();
                     }
                 });
             });
