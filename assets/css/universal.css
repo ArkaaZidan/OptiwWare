@@ -1,15 +1,15 @@
 /* --- VARIABLES --- */
 :root {
-    --primary: #f97316;
-    --primary-light: #fff7ed;
-    --sidebar-bg: #1e293b;
-    --sidebar-hover: #334155;
+    --primary: #168d5c;
+    --primary-light: #e9f5ed;
+    --sidebar-bg: #eef4f6;
+    --sidebar-hover: #dce9ee;
     --bg-color: #f8fafc;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
+    --text-main: #0b4263;
+    --text-muted: #5f7785;
 
-    --success: #10b981;
-    --success-bg: #d1fae5;
+    --success: #168d5c;
+    --success-bg: #e3f4e9;
     --warn: #f59e0b;
     --warn-bg: #fef3c7;
     --danger: #ef4444;
@@ -41,7 +41,7 @@ body {
 .sidebar {
     width: 250px;
     background-color: var(--sidebar-bg);
-    color: #fff;
+    color: var(--text-main);
     display: flex;
     flex-direction: column;
     transition: all 0.3s;
@@ -50,14 +50,15 @@ body {
 .logo-container {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px; /* Jarak antara gambar logo dan teks */
     padding: 24px;
 }
 
 /* Membatasi ukuran gambar agar tidak melebar/gepeng */
 .logo-image {
-    width: 45px; /* Lebar logo, bisa dinaik-turunkan sesuai selera (misal: 40px atau 50px) */
-    height: auto; /* Menjaga proporsi asli gambar */
+    width: 190px;
+    height: auto;
     object-fit: contain;
 }
 
@@ -66,7 +67,7 @@ body {
     font-size: 22px;
     font-weight: 700;
     margin: 0;
-    color: #ffffff;
+    color: var(--text-main);
 }
 
 .nav-menu {
@@ -82,7 +83,7 @@ body {
     align-items: center;
     gap: 16px;
     padding: 14px 20px;
-    color: #cbd5e1;
+    color: #38586b;
     text-decoration: none;
     border-radius: 10px;
     font-weight: 500;
@@ -92,7 +93,7 @@ body {
 
 .nav-item:hover {
     background-color: var(--sidebar-hover);
-    color: #fff;
+    color: var(--text-main);
 }
 
 .nav-item.active {
@@ -363,6 +364,7 @@ th:last-child, td:last-child {
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 12px;
+    line-height: 1.4;
     font-weight: 600;
     display: inline-block;
 }
@@ -404,7 +406,7 @@ th:last-child, td:last-child {
 }
 
 .btn-primary-sm:hover {
-    background-color: #ea580c;
+    background-color: #107349;
 }
 
 /* ====================================================================
@@ -453,6 +455,15 @@ th:last-child, td:last-child {
     display: flex !important;
     align-items: center !important;
     font-family: 'Inter', sans-serif !important;
+}
+
+/* Beri ruang di sekeliling label berwarna di dalam sel tabel. */
+.webix_dtable .webix_cell [class*="badge"],
+.webix_dtable .webix_cell [class*="-tag"],
+.webix_dtable .webix_cell .stock-ok,
+.webix_dtable .webix_cell .stock-low {
+    margin: 2px 5px;
+    line-height: 1.4;
 }
 
 .optiware-webix-table .webix_row_hover {
@@ -553,7 +564,7 @@ th:last-child, td:last-child {
 
 .optiware-btn-primary button:hover,
 .webix_el_button.optiware-btn-primary button:hover {
-    background: #ea580c !important;
+    background: #107349 !important;
 }
 
 /* Secondary Button in Webix */
@@ -758,6 +769,14 @@ th:last-child, td:last-child {
 
     .sidebar {
         width: 80px;
+    }
+
+    .logo-container {
+        padding: 16px 8px;
+    }
+
+    .logo-image {
+        width: 64px;
     }
 
     .logo-container h2, .nav-item span, .user-info {

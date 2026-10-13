@@ -10,13 +10,13 @@
   <script src="https://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
   <style>
     :root {
-      --primary: #f97316;
-      --primary-light: #fff7ed;
-      --sidebar-bg: #1e293b;
-      --sidebar-hover: #334155;
+      --primary: #168d5c;
+      --primary-light: #e9f5ed;
+      --sidebar-bg: #0b4263;
+      --sidebar-hover: #164f6e;
       --bg-color: #f8fafc;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
+      --text-main: #0b4263;
+      --text-muted: #5f7785;
       --ink: var(--text-main)
     }
 
@@ -39,9 +39,9 @@
     }
 
     .hero {
-      background: linear-gradient(145deg, #1e293b 0%, #263449 70%, #334155 140%);
+      background: linear-gradient(145deg, #eaf2f5 0%, #eef6f1 70%, #e4f0e8 140%);
       padding: 56px clamp(28px, 6vw, 88px);
-      color: #fff;
+      color: var(--text-main);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -54,41 +54,38 @@
       position: absolute;
       width: 460px;
       height: 460px;
-      border: 1px solid rgba(255, 255, 255, .08);
+      border: 1px solid rgba(11, 66, 99, .10);
       border-radius: 50%;
       right: -210px;
       bottom: -130px;
-      box-shadow: 0 0 0 55px rgba(255, 255, 255, .025), 0 0 0 110px rgba(255, 255, 255, .02)
+      box-shadow: 0 0 0 55px rgba(11, 66, 99, .025), 0 0 0 110px rgba(11, 66, 99, .02)
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: flex-start;
+      gap: 8px;
+      margin-bottom: 12px;
       position: relative;
       z-index: 1
     }
 
-    .brand-mark {
-      width: 48px;
-      height: 48px;
-      background: var(--primary);
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      color: #fff
+    .brand-name {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -.8px;
+      color: var(--text-main)
     }
 
-    .brand-name {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -.8px
+    .brand-name .brand-ware {
+      color: #58b883;
     }
 
     .brand-sub {
       font-size: 11px;
       letter-spacing: 2px;
-      color: #a9bdcf;
+      color: #5f7785;
       text-transform: uppercase;
       margin-top: 2px
     }
@@ -104,7 +101,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      color: #fdba74;
+      color: #168d5c;
       font-size: 12px;
       letter-spacing: 1.4px;
       text-transform: uppercase;
@@ -112,10 +109,7 @@
     }
 
     .eyebrow:before {
-      content: "";
-      width: 24px;
-      height: 2px;
-      background: var(--primary)
+      content: none
     }
 
     .hero h1 {
@@ -127,7 +121,7 @@
     }
 
     .hero p {
-      color: #b7c7d7;
+      color: #4c6574;
       font-size: 16px;
       line-height: 1.8;
       max-width: 460px;
@@ -143,14 +137,14 @@
     }
 
     .feature {
-      border: 1px solid rgba(255, 255, 255, .12);
-      background: rgba(255, 255, 255, .045);
+      border: 1px solid rgba(11, 66, 99, .12);
+      background: rgba(255, 255, 255, .62);
       padding: 15px 13px;
       border-radius: 12px
     }
 
     .feature-icon {
-      color: #fb923c;
+      color: #168d5c;
       font-size: 18px
     }
 
@@ -162,7 +156,7 @@
 
     .feature span {
       display: block;
-      color: #a4b8ca;
+      color: #5f7785;
       font-size: 11px;
       margin-top: 5px;
       line-height: 1.5
@@ -171,7 +165,7 @@
     .hero-foot {
       position: relative;
       z-index: 1;
-      color: #8097ad;
+      color: #6b8491;
       font-size: 12px
     }
 
@@ -242,7 +236,7 @@
 
     .field input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(249, 115, 22, .12)
+      box-shadow: 0 0 0 3px rgba(22, 141, 92, .12)
     }
 
     .primary {
@@ -259,7 +253,7 @@
     }
 
     .primary:hover {
-      background: #ea580c
+      background: #107349
     }
 
     .switch {
@@ -272,7 +266,7 @@
     .switch button {
       border: 0;
       background: none;
-      color: #ea580c;
+      color: #107349;
       font-weight: 800;
       cursor: pointer;
       padding: 4px
@@ -324,9 +318,11 @@
 
       .mobile-brand {
         display: flex;
-        margin-bottom: 28px;
+        margin-bottom: 38px;
         align-items: center;
-        gap: 10px
+        justify-content: flex-start;
+        gap: 8px;
+        width: min(420px, 100%)
       }
 
       .login-card {
@@ -334,7 +330,7 @@
       }
 
       .mobile-brand .brand-name {
-        font-size: 22px
+        font-size: 30px
       }
     }
   </style>
@@ -344,52 +340,33 @@
   <div class="page">
     <section class="hero">
       <div class="brand">
-        <div class="brand-mark"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m3 10 9-7 9 7" />
-            <path d="M5 9v12h14V9M9 21v-7h6v7M8 11h2m4 0h2" />
-          </svg></div>
-        <div>
-          <div class="brand-name">OptiWare</div>
-          <div class="brand-sub">Retail operations</div>
-        </div>
+        <div class="brand-name"><span>Opti</span><span class="brand-ware">Ware</span></div>
       </div>
       <div class="hero-copy">
-        <div class="eyebrow">Inventory made clearer</div>
-        <h1>Semua stok dalam satu kendali.</h1>
-        <p>Kelola produk, pantau persediaan, dan catat penjualan dengan alur kerja yang lebih rapi—langsung dari satu
-          dashboard.</p>
+        <h1>Kelola toko dan stok dengan mudah.</h1>
+        <p>Catat produk dan transaksi, serta pantau stok toko Anda melalui satu aplikasi.</p>
         <div class="feature-list">
           <div class="feature">
-            <div class="feature-icon">▦</div><strong>Data terpusat</strong><span>Produk tersimpan rapi</span>
+            <div class="feature-icon">▦</div><strong>Data produk</strong><span>Catat produk dengan mudah</span>
           </div>
           <div class="feature">
-            <div class="feature-icon">↗</div><strong>Stok terpantau</strong><span>Ketahui stok menipis</span>
+            <div class="feature-icon">↗</div><strong>Pantau stok</strong><span>Periksa stok yang hampir habis</span>
           </div>
           <div class="feature">
-            <div class="feature-icon">◷</div><strong>Transaksi cepat</strong><span>Riwayat mudah dilacak</span>
+            <div class="feature-icon">◷</div><strong>Catatan transaksi</strong><span>Lihat riwayat transaksi toko</span>
           </div>
         </div>
       </div>
-      <div class="hero-foot">OptiWare · Retail & Inventory Management</div>
     </section>
     <main class="right">
       <div style="width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column">
         <div class="mobile-brand">
-          <div class="brand-mark"><svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m3 10 9-7 9 7" />
-              <path d="M5 9v12h14V9M9 21v-7h6v7" />
-            </svg></div>
-          <div>
-            <div class="brand-name">OptiWare</div>
-            <div class="brand-sub">Retail operations</div>
-          </div>
+          <div class="brand-name"><span>Opti</span><span class="brand-ware">Ware</span></div>
         </div>
         <section class="login-card">
-          <div class="card-overline" id="modeLabel">Welcome back</div>
-          <h2 id="formTitle">Selamat datang.</h2>
-          <p class="intro" id="formIntro">Masuk untuk melanjutkan ke dashboard operasional toko.</p>
+          <div class="card-overline" id="modeLabel">Masuk akun</div>
+          <h2 id="formTitle">Silakan masuk</h2>
+          <p class="intro" id="formIntro">Masukkan username dan password untuk melanjutkan.</p>
           <form id="authForm">
             <div class="field" id="nameField" hidden><label for="name">Nama admin</label><input id="name" name="name"
                 type="text" autocomplete="name" placeholder="Nama lengkap"></div>
@@ -397,13 +374,13 @@
                 autocomplete="username" placeholder="admin" required></div>
             <div class="field"><label for="password">Password</label><input id="password" name="password"
                 type="password" autocomplete="current-password" placeholder="Minimal 8 karakter" required></div>
-            <button class="primary" id="submitBtn" type="submit">Masuk ke dashboard <span
+            <button class="primary" id="submitBtn" type="submit">Masuk <span
                 aria-hidden="true">→</span></button>
           </form>
           <div class="notice" id="notice" role="status"></div>
-          <div class="switch"><span id="switchText">Belum memiliki akun admin?</span> <button type="button"
-              id="switchBtn">Buat akun awal</button></div>
-          <div class="security"><span>▣</span> Akses dilindungi sesi login</div>
+          <div class="switch"><span id="switchText">Belum memiliki akun?</span> <button type="button"
+              id="switchBtn">Buat akun admin</button></div>
+          <div class="security"><span>▣</span> Gunakan akun admin untuk masuk</div>
         </section>
       </div>
     </main>
@@ -430,12 +407,12 @@
         setupMode = isSetup;
         nameField.hidden = !isSetup;
         nameInput.required = isSetup;
-        document.getElementById('modeLabel').textContent = isSetup ? 'Initial setup' : 'Welcome back';
-        document.getElementById('formTitle').textContent = isSetup ? 'Buat akun admin.' : 'Selamat datang.';
-        document.getElementById('formIntro').textContent = isSetup ? 'Buat akun admin pertama untuk mengamankan dashboard OptiWare.' : 'Masuk untuk melanjutkan ke dashboard operasional toko.';
-        submitBtn.innerHTML = isSetup ? 'Buat akun & lanjutkan →' : 'Masuk ke dashboard →';
-        document.getElementById('switchText').textContent = isSetup ? 'Sudah memiliki akun?' : 'Belum memiliki akun admin?';
-        switchBtn.textContent = isSetup ? 'Kembali ke login' : 'Buat akun awal';
+        document.getElementById('modeLabel').textContent = isSetup ? 'Buat akun' : 'Masuk akun';
+        document.getElementById('formTitle').textContent = isSetup ? 'Buat akun admin' : 'Silakan masuk';
+        document.getElementById('formIntro').textContent = isSetup ? 'Buat akun admin untuk mulai menggunakan OptiWare.' : 'Masukkan username dan password untuk melanjutkan.';
+        submitBtn.innerHTML = isSetup ? 'Buat akun dan masuk' : 'Masuk';
+        document.getElementById('switchText').textContent = isSetup ? 'Sudah memiliki akun?' : 'Belum memiliki akun?';
+        switchBtn.textContent = isSetup ? 'Kembali ke login' : 'Buat akun admin';
         switchBtn.style.display = allowedToRegister ? 'inline-block' : 'none';
         passwordInput.autocomplete = isSetup ? 'new-password' : 'current-password';
         clearNotice();
@@ -447,7 +424,7 @@
           if (!response.ok) throw new Error(body.pesan || 'Koneksi database belum siap.');
           allowedToRegister = body.needsSetup;
           setMode(allowedToRegister);
-          if (allowedToRegister) showNotice('Belum ada akun. Silakan buat akun admin pertama.', 'success');
+          if (allowedToRegister) showNotice('Belum ada akun. Silakan buat akun admin.', 'success');
         } catch (error) {
           allowedToRegister = false;
           setMode(false);
@@ -472,7 +449,7 @@
           showNotice(error.message || 'Ada kendala saat masuk.');
         } finally {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = setupMode ? 'Buat akun & lanjutkan →' : 'Masuk ke dashboard →';
+          submitBtn.innerHTML = setupMode ? 'Buat akun dan masuk' : 'Masuk';
         }
       });
       checkSetup();

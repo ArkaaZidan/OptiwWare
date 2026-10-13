@@ -22,12 +22,12 @@
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(249, 115, 22, 0.25);
+    box-shadow: 0 2px 6px rgba(22, 141, 92, 0.25);
 }
 
 .btn-primary:hover {
-    background-color: #ea580c;
-    box-shadow: 0 4px 10px rgba(249, 115, 22, 0.35);
+    background-color: #107349;
+    box-shadow: 0 4px 10px rgba(22, 141, 92, 0.35);
     transform: translateY(-1px);
 }
 
@@ -68,7 +68,7 @@
 }
 
 .btn-primary-sm:hover {
-    background-color: #ea580c;
+    background-color: #107349;
 }
 
 .btn-danger {
@@ -94,6 +94,8 @@
 .settings-tabs {
     display: flex;
     align-items: center;
+    flex: 0 0 auto;
+    min-height: 58px;
     gap: 12px;
     margin-bottom: 24px;
     overflow-x: auto;
@@ -104,6 +106,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex: 0 0 auto;
+    height: 54px;
+    box-sizing: border-box;
     padding: 12px 20px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -126,7 +131,7 @@
 .settings-tab:hover {
     border-color: var(--primary);
     color: var(--primary);
-    transform: translateY(-1px);
+    transform: none;
 }
 
 .settings-tab:hover i {
@@ -137,7 +142,9 @@
     background: var(--primary);
     color: #ffffff;
     border-color: var(--primary);
-    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(22, 141, 92, 0.25);
+    transform: none;
 }
 
 .settings-tab.active i {
@@ -227,7 +234,7 @@
 .settings-select:focus, 
 .settings-textarea:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+    box-shadow: 0 0 0 3px rgba(22, 141, 92, 0.12);
 }
 
 .settings-textarea {
