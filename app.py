@@ -1,7 +1,8 @@
 import os
 import re
+import json
 from io import BytesIO
-from flask import Flask, request, jsonify, session, send_file
+from flask import Flask, request, jsonify, session, send_file, redirect, send_from_directory
 from flask_cors import CORS
 from pymongo import MongoClient
 from bson import ObjectId
@@ -29,6 +30,7 @@ db = client["db_ritel"]
 tabel_user = db["users"]
 tabel_barang = db["barang"]    
 tabel_riwayat = db["riwayat"] 
+tabel_transaksi = db["transaksi"]
 
 
 #ini aku bikin funcion buat pengecekan
@@ -81,7 +83,152 @@ def catat_riwayat(barang_id, nama_barang, jenis, jumlah, catatan):
 
 @app.route("/")
 def beranda():
-    return jsonify({"pesan": "API jalan"})
+    if "user_id" in session:
+        return redirect("/dashboard")
+    return send_from_directory(os.path.dirname(__file__), "login.html")
+
+@app.route("/dashboard")
+@login_required
+def halaman_dashboard():
+    with open(os.path.join(os.path.dirname(__file__), "dashboard.html"), encoding="utf-8") as file:
+        halaman = file.read()
+    # Jangan render seluruh HTML melalui Jinja: sintaks komentar JS/CSS bisa
+    # terbaca sebagai tag komentar Jinja dan menyebabkan TemplateSyntaxError.
+    return halaman.replace("{{ user_name|tojson }}", json.dumps(session.get("username", "")))
+
+@app.route("/assets/<path:nama_file>")
+def aset_frontend(nama_file):
+    return send_from_directory(os.path.join(os.path.dirname(__file__), "assets"), nama_file)
+
+@app.route("/<path:nama_file>")
+def halaman_frontend(nama_file):
+    # Halaman lama tetap bisa dibuka, dashboard aktif tetap dilindungi sesi.
+    if nama_file in {"dashboard.html", "index.html"}:
+        return redirect("/dashboard")
+    return send_from_directory(os.path.dirname(__file__), nama_file)
+
+@app.route("/api/setup-status")
+def status_setup():
+    return jsonify({"needsSetup": tabel_user.count_documents({}) == 0})
+
+def produk_dashboard(barang):
+    return {
+        "id": str(barang["_id"]),
+        "sku": barang.get("sku", ""),
+        "name": barang.get("nama", ""),
+        "category": barang.get("kategori", "Umum"),
+        "price": barang.get("harga", 0),
+        "stock": barang.get("stok", 0),
+        "createdAt": barang.get("dibuat", datetime.now()).isoformat(),
+    }
+
+@app.route("/api/products", methods=["GET"])
+@login_required
+def daftar_produk_dashboard():
+    return jsonify({"data": [produk_dashboard(p) for p in tabel_barang.find().sort("dibuat", -1)]})
+
+@app.route("/api/products", methods=["POST"])
+@login_required
+def tambah_produk_dashboard():
+    data = request.get_json() or {}
+    nama = (data.get("name") or "").strip()
+    sku = (data.get("sku") or "").strip()
+    kategori = (data.get("category") or "Umum").strip()
+    stok = ke_bulat(data.get("stock"))
+    harga = ke_angka(data.get("price"))
+    if not nama or not sku:
+        return jsonify({"message": "SKU dan nama produk wajib diisi."}), 400
+    if stok is None or stok < 0 or harga is None or harga < 0:
+        return jsonify({"message": "Harga dan stok harus berupa angka >= 0."}), 400
+    if tabel_barang.find_one({"sku": sku}):
+        return jsonify({"message": "SKU sudah digunakan."}), 400
+    barang = {"sku": sku, "nama": nama, "kategori": kategori, "stok": stok,
+              "harga": harga, "dibuat": datetime.now(), "dibuat_oleh": session["username"]}
+    inserted = tabel_barang.insert_one(barang)
+    catat_riwayat(str(inserted.inserted_id), nama, "tambah", stok, "Produk baru ditambahkan")
+    return jsonify({"message": "Produk berhasil disimpan ke database.", "id": str(inserted.inserted_id)}), 201
+
+@app.route("/api/products/<id>", methods=["PUT"])
+@login_required
+def ubah_produk_dashboard(id):
+    oid = cari_id(id)
+    if oid is None:
+        return jsonify({"message": "ID produk tidak valid."}), 400
+    data = request.get_json() or {}
+    nama = (data.get("name") or "").strip()
+    sku = (data.get("sku") or "").strip()
+    kategori = (data.get("category") or "Umum").strip()
+    stok = ke_bulat(data.get("stock"))
+    harga = ke_angka(data.get("price"))
+    if not nama or not sku or stok is None or stok < 0 or harga is None or harga < 0:
+        return jsonify({"message": "Periksa SKU, nama, harga, dan stok produk."}), 400
+    if tabel_barang.find_one({"sku": sku, "_id": {"$ne": oid}}):
+        return jsonify({"message": "SKU sudah digunakan produk lain."}), 400
+    result = tabel_barang.update_one({"_id": oid}, {"$set": {
+        "sku": sku, "nama": nama, "kategori": kategori, "harga": harga, "stok": stok
+    }})
+    if not result.matched_count:
+        return jsonify({"message": "Produk tidak ditemukan."}), 404
+    return jsonify({"message": "Perubahan produk tersimpan."})
+
+@app.route("/api/products/<id>", methods=["DELETE"])
+@login_required
+def hapus_produk_dashboard(id):
+    oid = cari_id(id)
+    if oid is None:
+        return jsonify({"message": "ID produk tidak valid."}), 400
+    barang = tabel_barang.find_one_and_delete({"_id": oid})
+    if barang is None:
+        return jsonify({"message": "Produk tidak ditemukan."}), 404
+    catat_riwayat(id, barang.get("nama", ""), "hapus", barang.get("stok", 0), "Produk dihapus")
+    return jsonify({"message": "Produk berhasil dihapus."})
+
+@app.route("/api/sales", methods=["GET"])
+@login_required
+def daftar_penjualan():
+    records = []
+    for sale in tabel_transaksi.find().sort("dibuat", -1).limit(500):
+        records.append({"id": str(sale["_id"]), "productName": sale.get("nama_barang", ""),
+                        "sku": sale.get("sku", ""), "quantity": sale.get("jumlah", 0),
+                        "unitPrice": sale.get("harga_satuan", 0), "total": sale.get("total", 0),
+                        "cashier": sale.get("oleh", ""), "createdAt": sale.get("dibuat", datetime.now()).isoformat()})
+    return jsonify({"data": records})
+
+@app.route("/api/sales", methods=["POST"])
+@login_required
+def buat_penjualan():
+    data = request.get_json() or {}
+    oid = cari_id(data.get("productId", ""))
+    jumlah = ke_bulat(data.get("quantity"))
+    if oid is None or jumlah is None or jumlah <= 0:
+        return jsonify({"message": "Produk dan jumlah penjualan tidak valid."}), 400
+    barang = tabel_barang.find_one({"_id": oid})
+    if barang is None:
+        return jsonify({"message": "Produk tidak ditemukan."}), 404
+    updated = tabel_barang.update_one({"_id": oid, "stok": {"$gte": jumlah}}, {"$inc": {"stok": -jumlah}})
+    if not updated.modified_count:
+        return jsonify({"message": "Stok tidak cukup untuk penjualan ini."}), 400
+    total = jumlah * barang.get("harga", 0)
+    sale = {"barang_id": str(oid), "nama_barang": barang["nama"], "sku": barang.get("sku", ""),
+            "jumlah": jumlah, "harga_satuan": barang.get("harga", 0), "total": total,
+            "oleh": session["username"], "dibuat": datetime.now()}
+    tabel_transaksi.insert_one(sale)
+    catat_riwayat(str(oid), barang["nama"], "keluar", jumlah, "Penjualan kasir")
+    return jsonify({"message": "Penjualan tersimpan dan stok berhasil diperbarui.",
+                    "data": {"total": total}}), 201
+
+@app.route("/api/stats", methods=["GET"])
+@login_required
+def statistik_dashboard():
+    produk = list(tabel_barang.find({}, {"stok": 1}))
+    total_penjualan = sum(sale.get("total", 0) for sale in tabel_transaksi.find({}, {"total": 1}))
+    terbaru = []
+    for sale in tabel_transaksi.find().sort("dibuat", -1).limit(5):
+        terbaru.append({"productName": sale.get("nama_barang", ""), "quantity": sale.get("jumlah", 0),
+                       "total": sale.get("total", 0), "createdAt": sale.get("dibuat", datetime.now()).isoformat()})
+    return jsonify({"data": {"productCount": len(produk), "stockUnits": sum(p.get("stok", 0) for p in produk),
+        "revenue": total_penjualan, "saleCount": tabel_transaksi.count_documents({}),
+        "lowStock": sum(1 for p in produk if p.get("stok", 0) <= 5), "latestSales": terbaru}})
 
 @app.route("/api/register", methods=["POST"])
 def register():
@@ -101,11 +248,14 @@ def register():
     # password TIDAK disimpan asli, tapi di-hash
     password_hash = generate_password_hash(password)
 
-    tabel_user.insert_one({
+    hasil = tabel_user.insert_one({
         "username": username,
         "password": password_hash,
         "dibuat": datetime.now(),
     })
+    session.clear()
+    session["user_id"] = str(hasil.inserted_id)
+    session["username"] = username
     return jsonify({"pesan": "Register berhasil"}), 201
 
 @app.route("/api/login", methods = ["POST"])
@@ -148,7 +298,7 @@ def daftar_barang():
 
     filter_cari = {}
     if kata_cari != "":
-        filter_cari["nama"] = {"$reges" : re.escape(kata_cari), "$options" : "i"}
+        filter_cari["nama"] = {"$regex" : re.escape(kata_cari), "$options" : "i"}
     if kategori != "":
         filter_cari["kategori"] = kategori
 
