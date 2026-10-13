@@ -14,7 +14,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "rahasia-sementara")
+app.secret_key = os.environ.get("SECRET_KEY")
+if not app.secret_key or app.secret_key == "isi-dengan-teks-acak-yang-panjang":
+    raise RuntimeError("SECRET_KEY belum diatur di .env. Isi dengan string acak yang panjang.")
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True   
 app.config["SESSION_COOKIE_SAMESITE"] = os.environ.get("COOKIE_SAMESITE", "Lax")
@@ -25,11 +27,11 @@ alamat_frontend = os.environ.get("FRONTEND_URL", "http://localhost:3000").split(
 CORS(app, supports_credentials=True, origins=alamat_frontend)
 
 alamat_mongo = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
-client = MongoClient("mongodb+srv://672024016_db_user:672024016@cluster0.uzpexpn.mongodb.net/?appName=Cluster0")
-db = client["db_ritel"] 
+client = MongoClient(alamat_mongo)
+db = client["db_ritel"]
 tabel_user = db["users"]
-tabel_barang = db["barang"]    
-tabel_riwayat = db["riwayat"] 
+tabel_barang = db["barang"]
+tabel_riwayat = db["riwayat"]
 tabel_transaksi = db["transaksi"]
 
 
@@ -100,11 +102,20 @@ def halaman_dashboard():
 def aset_frontend(nama_file):
     return send_from_directory(os.path.join(os.path.dirname(__file__), "assets"), nama_file)
 
+HALAMAN_LAMA = {
+    "produk.html", "transaksi.html", "stok-gudang.html",
+    "laporan.html", "pengaturan.html", "warehouse.html",
+}
+
 @app.route("/<path:nama_file>")
 def halaman_frontend(nama_file):
-    # Halaman lama tetap bisa dibuka, dashboard aktif tetap dilindungi sesi.
     if nama_file in {"dashboard.html", "index.html"}:
         return redirect("/dashboard")
+    # Hanya halaman di whitelist yang boleh dibuka. app.py, .env, dll. dapat 404.
+    if nama_file not in HALAMAN_LAMA:
+        return jsonify({"pesan": "Halaman tidak ditemukan"}), 404
+    if "user_id" not in session:
+        return redirect("/")
     return send_from_directory(os.path.dirname(__file__), nama_file)
 
 @app.route("/api/setup-status")
@@ -232,6 +243,9 @@ def statistik_dashboard():
 
 @app.route("/api/register", methods=["POST"])
 def register():
+    if tabel_user.count_documents({}) > 0:
+        return jsonify({"pesan": "Pendaftaran ditutup. Hubungi admin."}), 403
+    
     data = request.get_json() or {}
     username = (data.get("username") or "").strip()
     password = data.get("password") or ""
@@ -514,4 +528,4 @@ def export_excel():
     )
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=os.environ.get("FLASK_DEBUG", "false") == "true", port=5000)
