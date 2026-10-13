@@ -13,3 +13,6 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+
+# dll
+cek_user.py
