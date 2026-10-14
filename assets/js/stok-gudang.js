@@ -869,62 +869,8 @@ if (typeof webix === "undefined") {
         }
 
         // ------------------------------------------------------------
-        // K. NOTIFIKASI & PROFIL POPUP (Konsisten)
+        // K. PROFIL POPUP (Konsisten)
         // ------------------------------------------------------------
-        const notifPopup = webix.ui({
-            view: "popup",
-            id: "notif_popup_gudang",
-            width: 340,
-            css: "optiware-notif-popup optiware-notif-popup-gudang",
-            body: {
-                rows: [
-                    {
-                        template: "<div class='notif-header'><span>Notifikasi Gudang</span><span class='notif-badge'>3 Baru</span></div>",
-                        autoheight: true
-                    },
-                    {
-                        view: "list",
-                        autoheight: true,
-                        rowHeight: 88,
-                        scroll: false,
-                        template: `
-                            <div class="notif-item">
-                                <div class="notif-icon-circle #type#">
-                                    <i class="#icon#"></i>
-                                </div>
-                                <div class="notif-text-container">
-                                    <div class="notif-title">#title#</div>
-                                    <div class="notif-time">#time#</div>
-                                </div>
-                            </div>
-                        `,
-                        data: [
-                            { id: 1, title: "Gudang C - Rak 03 stok Telur Ayam habis", time: "10 menit lalu", icon: "fa-solid fa-triangle-exclamation", type: "warn" },
-                            { id: 2, title: "Inbound Indomie 50 unit telah disimpan di Rak 01", time: "1 jam lalu", icon: "fa-solid fa-check", type: "success" },
-                            { id: 3, title: "Okupansi Gudang A mencapai 68%", time: "3 jam lalu", icon: "fa-solid fa-bell", type: "warn" }
-                        ]
-                    },
-                    {
-                        view: "button",
-                        value: "Tandai Sudah Dibaca",
-                        css: "webix_transparent notif-clear-btn",
-                        click: function () {
-                            const badge = document.querySelector(".notification .badge-dot");
-                            if (badge) badge.style.display = "none";
-                            $$("notif_popup_gudang").hide();
-                        }
-                    }
-                ]
-            }
-        });
-
-        const notifBtn = document.getElementById("topbar-notif-btn");
-        if (notifBtn) notifBtn.addEventListener("click", function () {
-            notifPopup.define("width", Math.max(1, Math.min(340, window.innerWidth - 24)));
-            notifPopup.resize();
-            notifPopup.show(this);
-        });
-
         const profilePopup = webix.ui({
             view: "popup",
             id: "profile_popup_gudang",

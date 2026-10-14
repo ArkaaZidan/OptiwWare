@@ -153,13 +153,6 @@ body {
     gap: 24px;
 }
 
-.notification {
-    position: relative;
-    font-size: 20px;
-    color: var(--text-main);
-    cursor: pointer;
-}
-
 .badge-dot {
     position: absolute;
     top: -4px;
@@ -600,93 +593,6 @@ th:last-child, td:last-child {
 .optiware-action-popup .webix_list_item:hover {
     background: #f8fafc !important;
     color: var(--primary) !important;
-}
-
-/* Notification Popup */
-.optiware-notif-popup .notif-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    font-weight: 700;
-    font-size: 14px;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.optiware-notif-popup .notif-badge {
-    background: var(--primary-light);
-    color: var(--primary);
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-weight: 600;
-}
-
-.optiware-notif-popup .notif-item {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    padding: 10px 16px;
-    border-bottom: 1px solid #f8fafc;
-    transition: background-color 0.15s;
-}
-
-.optiware-notif-popup-gudang .notif-item {
-    box-sizing: border-box;
-    min-height: 76px;
-    margin: 6px 8px;
-    border: 1px solid #e8edf3;
-    border-radius: 10px;
-}
-
-.optiware-notif-popup .notif-item:hover {
-    background: #f8fafc;
-}
-
-.optiware-notif-popup .notif-icon-circle {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-.optiware-notif-popup .notif-icon-circle.warn {
-    background: var(--warn-bg);
-    color: var(--warn);
-}
-
-.optiware-notif-popup .notif-icon-circle.success {
-    background: var(--success-bg);
-    color: var(--success);
-}
-
-.optiware-notif-popup .notif-text-container {
-    flex: 1;
-}
-
-.optiware-notif-popup .notif-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-main);
-    line-height: 1.3;
-}
-
-.optiware-notif-popup .notif-time {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 4px;
-}
-
-.notif-clear-btn button {
-    color: var(--primary) !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-    padding: 8px !important;
 }
 
 /* Product Detail Modal */

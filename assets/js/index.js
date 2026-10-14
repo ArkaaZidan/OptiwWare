@@ -558,65 +558,6 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // 8. POPUP PEMBERITAHUAN (NOTIFICATION)
-        // ------------------------------------------------------------
-        const notifPopup = webix.ui({
-            view: "popup",
-            id: "notif_popup",
-            width: 340,
-            css: "optiware-notif-popup",
-            body: {
-                rows: [
-                    {
-                        template: `
-                            <div class="notif-header">
-                                <span>Notifikasi Terkini</span>
-                                <span class="notif-badge">3 Baru</span>
-                            </div>
-                        `,
-                        autoheight: true
-                    },
-                    {
-                        view: "list",
-                        id: "notif_list",
-                        autoheight: true,
-                        scroll: false,
-                        template: function (obj) {
-                            return `
-                                <div class="notif-item">
-                                    <div class="notif-icon-circle ${obj.type}">
-                                        <i class="${obj.icon}"></i>
-                                    </div>
-                                    <div class="notif-text-container">
-                                        <div class="notif-title">${obj.title}</div>
-                                        <div class="notif-time">${obj.time}</div>
-                                    </div>
-                                </div>
-                            `;
-                        },
-                        data: [
-                            { id: 1, title: "Telur Ayam 1kg stok habis (5 unit sisa)", time: "10 menit yang lalu", icon: "fa-solid fa-triangle-exclamation", type: "warn" },
-                            { id: 2, title: "Mie Sedaap 75g stok menipis (10 unit sisa)", time: "45 menit yang lalu", icon: "fa-solid fa-triangle-exclamation", type: "warn" },
-                            { id: 3, title: "Transaksi baru #TRX-86 telah selesai", time: "2 jam yang lalu", icon: "fa-solid fa-check", type: "success" }
-                        ]
-                    },
-                    {
-                        view: "button",
-                        value: "Tandai Semua Sudah Dibaca",
-                        css: "webix_transparent notif-clear-btn",
-                        click: function () {
-                            const badgeDot = document.querySelector(".notification .badge-dot");
-                            if (badgeDot) badgeDot.style.display = "none";
-                            webix.message({ type: "info", text: "Semua notifikasi telah ditandai dibaca" });
-                            $$("notif_popup").hide();
-                        }
-                    }
-                ]
-            }
-        });
-
-        // ------------------------------------------------------------
         // 9. POPUP KALENDER / DATE PICKER
         // ------------------------------------------------------------
         const datePopup = webix.ui({
@@ -772,14 +713,6 @@ if (typeof webix === "undefined") {
         if (datePickerBtn) {
             datePickerBtn.addEventListener("click", function () {
                 datePopup.show(this);
-            });
-        }
-
-        // E. Klik Ikon Notifikasi (Bell)
-        const notifBtn = document.querySelector(".notification");
-        if (notifBtn) {
-            notifBtn.addEventListener("click", function () {
-                notifPopup.show(this);
             });
         }
 

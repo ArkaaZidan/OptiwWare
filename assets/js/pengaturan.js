@@ -24,8 +24,7 @@ const defaultSettings = {
     stockMinThreshold: 15,
     taxRate: 11,
     invoicePrefix: "TRX-2026-",
-    autoPrint: "yes",
-    notifyLowStock: true
+    autoPrint: "yes"
 };
 
 const defaultUsers = [
@@ -422,7 +421,6 @@ if (typeof webix === "undefined") {
             if (document.getElementById("tax-rate")) document.getElementById("tax-rate").value = s.taxRate || 11;
             if (document.getElementById("invoice-prefix")) document.getElementById("invoice-prefix").value = s.invoicePrefix || "TRX-2026-";
             if (document.getElementById("auto-print")) document.getElementById("auto-print").value = s.autoPrint || "yes";
-            if (document.getElementById("notify-low-stock")) document.getElementById("notify-low-stock").checked = !!s.notifyLowStock;
         }
 
         function collectSettingsForm() {
@@ -438,8 +436,7 @@ if (typeof webix === "undefined") {
                 stockMinThreshold: parseInt(document.getElementById("stock-min-threshold")?.value, 10) || 15,
                 taxRate: parseFloat(document.getElementById("tax-rate")?.value) || 11,
                 invoicePrefix: document.getElementById("invoice-prefix")?.value || "TRX-2026-",
-                autoPrint: document.getElementById("auto-print")?.value || "yes",
-                notifyLowStock: !!document.getElementById("notify-low-stock")?.checked
+                autoPrint: document.getElementById("auto-print")?.value || "yes"
             };
         }
 
@@ -575,57 +572,8 @@ if (typeof webix === "undefined") {
         }
 
         // ------------------------------------------------------------
-        // G. NOTIFIKASI & PROFIL POPUP (Konsisten)
+        // G. PROFIL POPUP (Konsisten)
         // ------------------------------------------------------------
-        const notifPopup = webix.ui({
-            view: "popup",
-            id: "notif_popup_settings",
-            width: 340,
-            css: "optiware-notif-popup",
-            body: {
-                rows: [
-                    {
-                        template: "<div class='notif-header'><span>Notifikasi Sistem</span><span class='notif-badge'>3 Baru</span></div>",
-                        autoheight: true
-                    },
-                    {
-                        view: "list",
-                        autoheight: true,
-                        scroll: false,
-                        template: `
-                            <div class="notif-item">
-                                <div class="notif-icon-circle #type#">
-                                    <i class="#icon#"></i>
-                                </div>
-                                <div class="notif-text-container">
-                                    <div class="notif-title">#title#</div>
-                                    <div class="notif-time">#time#</div>
-                                </div>
-                            </div>
-                        `,
-                        data: [
-                            { id: 1, title: "Sistem berjalan normal pada versi 2.4", time: "10 menit lalu", icon: "fa-solid fa-circle-check", type: "success" },
-                            { id: 2, title: "Pencadangan data otomatis tersedia di tab Cadangan", time: "1 jam lalu", icon: "fa-solid fa-database", type: "warn" },
-                            { id: 3, title: "4 akun staf terdaftar dan siap digunakan", time: "3 jam lalu", icon: "fa-solid fa-users", type: "success" }
-                        ]
-                    },
-                    {
-                        view: "button",
-                        value: "Tandai Sudah Dibaca",
-                        css: "webix_transparent notif-clear-btn",
-                        click: function () {
-                            const badge = document.querySelector(".notification .badge-dot");
-                            if (badge) badge.style.display = "none";
-                            $$("notif_popup_settings").hide();
-                        }
-                    }
-                ]
-            }
-        });
-
-        const notifBtn = document.getElementById("topbar-notif-btn");
-        if (notifBtn) notifBtn.addEventListener("click", function () { notifPopup.show(this); });
-
         const profilePopup = webix.ui({
             view: "popup",
             id: "profile_popup_settings",

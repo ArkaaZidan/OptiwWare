@@ -350,57 +350,8 @@ if (typeof webix === "undefined") {
         }
 
         // ------------------------------------------------------------
-        // G. NOTIFIKASI & PROFIL POPUP (Konsisten)
+        // G. PROFIL POPUP (Konsisten)
         // ------------------------------------------------------------
-        const notifPopup = webix.ui({
-            view: "popup",
-            id: "notif_popup_laporan",
-            width: 340,
-            css: "optiware-notif-popup",
-            body: {
-                rows: [
-                    {
-                        template: "<div class='notif-header'><span>Notifikasi Bisnis</span><span class='notif-badge'>3 Baru</span></div>",
-                        autoheight: true
-                    },
-                    {
-                        view: "list",
-                        autoheight: true,
-                        scroll: false,
-                        template: `
-                            <div class="notif-item">
-                                <div class="notif-icon-circle #type#">
-                                    <i class="#icon#"></i>
-                                </div>
-                                <div class="notif-text-container">
-                                    <div class="notif-title">#title#</div>
-                                    <div class="notif-time">#time#</div>
-                                </div>
-                            </div>
-                        `,
-                        data: [
-                            { id: 1, title: "Laporan harian 11 Okt 2026 telah diarsipkan", time: "30 menit lalu", icon: "fa-solid fa-file-lines", type: "success" },
-                            { id: 2, title: "Margin laba ritel bulan ini stabil di 29.2%", time: "2 jam lalu", icon: "fa-solid fa-chart-line", type: "success" },
-                            { id: 3, title: "Produk Indomie 85g mencapai 95 unit terjual", time: "4 jam lalu", icon: "fa-solid fa-fire", type: "warn" }
-                        ]
-                    },
-                    {
-                        view: "button",
-                        value: "Tandai Sudah Dibaca",
-                        css: "webix_transparent notif-clear-btn",
-                        click: function () {
-                            const badge = document.querySelector(".notification .badge-dot");
-                            if (badge) badge.style.display = "none";
-                            $$("notif_popup_laporan").hide();
-                        }
-                    }
-                ]
-            }
-        });
-
-        const notifBtn = document.getElementById("topbar-notif-btn");
-        if (notifBtn) notifBtn.addEventListener("click", function () { notifPopup.show(this); });
-
         const profilePopup = webix.ui({
             view: "popup",
             id: "profile_popup_laporan",

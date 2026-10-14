@@ -1076,57 +1076,8 @@ if (typeof webix === "undefined") {
         }
 
         // ------------------------------------------------------------
-        // G. POPUP NOTIFIKASI & PROFIL (Konsisten)
+        // G. POPUP PROFIL (Konsisten)
         // ------------------------------------------------------------
-        const notifPopup = webix.ui({
-            view: "popup",
-            id: "notif_popup_trx",
-            width: 340,
-            css: "optiware-notif-popup",
-            body: {
-                rows: [
-                    {
-                        template: "<div class='notif-header'><span>Notifikasi Penjualan</span><span class='notif-badge'>3 Baru</span></div>",
-                        autoheight: true
-                    },
-                    {
-                        view: "list",
-                        autoheight: true,
-                        scroll: false,
-                        template: `
-                            <div class="notif-item">
-                                <div class="notif-icon-circle #type#">
-                                    <i class="#icon#"></i>
-                                </div>
-                                <div class="notif-text-container">
-                                    <div class="notif-title">#title#</div>
-                                    <div class="notif-time">#time#</div>
-                                </div>
-                            </div>
-                        `,
-                        data: [
-                            { id: 1, title: "Transaksi baru TRX-0086 senilai Rp 24.500 selesai", time: "15 menit lalu", icon: "fa-solid fa-circle-check", type: "success" },
-                            { id: 2, title: "TRX-0079 senilai Rp 148.000 menunggu pembayaran", time: "1 jam lalu", icon: "fa-solid fa-clock", type: "warn" },
-                            { id: 3, title: "Target omset harian telah tercapai 85%", time: "2 jam lalu", icon: "fa-solid fa-chart-line", type: "success" }
-                        ]
-                    },
-                    {
-                        view: "button",
-                        value: "Tandai Sudah Dibaca",
-                        css: "webix_transparent notif-clear-btn",
-                        click: function () {
-                            const badge = document.querySelector(".notification .badge-dot");
-                            if (badge) badge.style.display = "none";
-                            $$("notif_popup_trx").hide();
-                        }
-                    }
-                ]
-            }
-        });
-
-        const notifBtn = document.getElementById("topbar-notif-btn");
-        if (notifBtn) notifBtn.addEventListener("click", function () { notifPopup.show(this); });
-
         const profilePopup = webix.ui({
             view: "popup",
             id: "profile_popup_trx",
