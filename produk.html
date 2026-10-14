@@ -24,7 +24,7 @@
 
     <div class="app-container">
         <!-- SIDEBAR (Menyesuaikan dengan tampilan di index, menu Produk aktif) -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="app-sidebar">
             <div class="logo-container">
                 <img src="assets/images/Widhi-removebg-preview.png" alt="Widhi" class="logo-image">
             </div>
@@ -68,6 +68,9 @@
         <main class="main-content">
             <!-- TOPBAR -->
             <header class="topbar">
+                <button class="mobile-menu-toggle" type="button" aria-controls="app-sidebar" aria-expanded="false" aria-label="Buka menu navigasi">
+                    <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                </button>
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="topbar-search-produk" placeholder="Cari nama produk, SKU, kategori, atau rak...">
@@ -189,6 +192,7 @@
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/sync.js"></script>
     <script src="assets/js/produk.js"></script>
+    <script src="assets/js/mobile-menu.js"></script>
     
 </body>
 </html>

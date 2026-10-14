@@ -105,6 +105,10 @@ body {
     padding: 24px 16px;
 }
 
+.mobile-menu-toggle {
+    display: none;
+}
+
 /* --- MAIN CONTENT --- */
 .main-content {
     flex: 1;
@@ -708,5 +712,109 @@ th:last-child, td:last-child {
 
     .nav-item i {
         font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    .app-container.menu-open::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 999;
+        background: rgba(11, 30, 45, 0.48);
+    }
+
+    .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 1000;
+        width: min(280px, 84vw);
+        height: 100vh;
+        height: 100dvh;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        box-shadow: 8px 0 28px rgba(11, 30, 45, 0.16);
+    }
+
+    .app-container.menu-open .sidebar {
+        transform: translateX(0);
+    }
+
+    .logo-container {
+        padding: 24px;
+    }
+
+    .logo-image {
+        width: 190px;
+    }
+
+    .logo-container h2,
+    .sidebar .nav-item span,
+    .sidebar .user-info {
+        display: initial;
+    }
+
+    .sidebar .nav-item {
+        justify-content: flex-start;
+        padding: 14px 20px;
+    }
+
+    .sidebar .nav-item i {
+        font-size: 16px;
+    }
+
+    .sidebar-bottom {
+        padding: 24px 16px;
+    }
+
+    .main-content {
+        min-width: 0;
+        width: 100%;
+        padding: 16px;
+    }
+
+    .topbar {
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .mobile-menu-toggle {
+        display: inline-flex;
+        flex: 0 0 42px;
+        width: 42px;
+        height: 42px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #dbe5eb;
+        border-radius: 10px;
+        background: #fff;
+        color: var(--text-main);
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    .mobile-menu-toggle:focus-visible {
+        outline: 3px solid rgba(22, 141, 92, 0.28);
+        outline-offset: 2px;
+    }
+
+    .search-box {
+        flex: 1;
+        min-width: 0;
+        width: auto;
+        padding: 10px 12px;
+    }
+
+    .search-box input {
+        min-width: 0;
+    }
+
+    .topbar-right {
+        gap: 0;
     }
 }
