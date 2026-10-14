@@ -76,6 +76,7 @@ def halaman_login():
 
 
 @app.route("/register")
+@app.route("/register.html")
 def halaman_register():
     if "user_id" in session:
         return redirect("/dashboard")
