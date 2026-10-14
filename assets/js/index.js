@@ -30,13 +30,16 @@ if (typeof webix === "undefined") {
             } catch (e) {
                 console.warn("Gagal membaca localStorage:", e);
             }
-            return [
-                { id: 1, no: 1, nama: "Indomie Goreng 85g", kategori: "Makanan", stok: 120, status: "Aman", kode: "OPT-001", rak: "Gudang A - Rak 01" },
-                { id: 2, no: 2, nama: "Aqua 600ml", kategori: "Minuman", stok: 45, status: "Aman", kode: "OPT-002", rak: "Gudang A - Rak 02" },
-                { id: 3, no: 3, nama: "Mie Sedaap 75g", kategori: "Makanan", stok: 10, status: "Hampir Habis", kode: "OPT-003", rak: "Gudang B - Rak 01" },
-                { id: 4, no: 4, nama: "Telur Ayam 1kg", kategori: "Bahan Pokok", stok: 5, status: "Habis", kode: "OPT-004", rak: "Gudang C - Rak 03" },
-                { id: 5, no: 5, nama: "Minyak Goreng 1L", kategori: "Bahan Pokok", stok: 28, status: "Hampir Habis", kode: "OPT-005", rak: "Gudang B - Rak 02" }
-            ];
+            return [];
+        }
+
+        function getStoredTransactions() {
+            try {
+                const parsed = JSON.parse(localStorage.getItem("optiware_transactions_data") || "[]");
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return [];
+            }
         }
 
         function saveStoredProducts(data) {
@@ -58,10 +61,11 @@ if (typeof webix === "undefined") {
         let currentSelectedId = null;
 
         // Base metrics untuk sinkronisasi stat card
+        // (nilai dihitung ulang dari data database oleh syncDashboardStats)
         let statsState = {
-            totalProduk: 124,
-            totalStok: 1560,
-            hampirHabis: 3
+            totalProduk: 0,
+            totalStok: 0,
+            hampirHabis: 0
         };
 
         // ------------------------------------------------------------
@@ -643,35 +647,87 @@ if (typeof webix === "undefined") {
             const table = $$("table_produk");
             if (!table) return;
 
-            let warningCount = 0;
-            table.data.each(function (obj) {
-                if (obj.status === "Hampir Habis" || obj.status === "Habis" || (parseInt(obj.stok, 10) <= 15)) {
-                    warningCount++;
+            const products = [];
+            table.data.each(function (obj) { products.push(obj); });
+            renderStats(products, getStoredTransactions());
+        }
+
+        function setText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        }
+
+        function setTrend(id, iconClass, text) {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = `<i class="${iconClass}"></i> ${text}`;
+        }
+
+        // Hitung semua kartu statistik langsung dari data produk & transaksi
+        function renderStats(products, transactions) {
+            let totalStok = 0;
+            let hampirHabis = 0;
+            products.forEach(function (p) {
+                const stok = parseInt(p.stok, 10) || 0;
+                totalStok += stok;
+                if (stok <= 15) hampirHabis++;
+            });
+
+            let omset = 0;
+            let lunas = 0;
+            let pending = 0;
+            transactions.forEach(function (t) {
+                if (t.status === "Selesai") {
+                    omset += Number(t.total) || 0;
+                    lunas++;
+                } else if (t.status === "Pending") {
+                    pending++;
                 }
             });
-            statsState.hampirHabis = warningCount;
 
-            // Update Total Produk di Stat Card kedua
-            const totalProdukEl = document.querySelector(".stats-grid .stat-card:nth-child(2) .stat-value");
-            if (totalProdukEl) {
-                totalProdukEl.textContent = statsState.totalProduk.toLocaleString("id-ID");
-            }
+            statsState.totalProduk = products.length;
+            statsState.totalStok = totalStok;
+            statsState.hampirHabis = hampirHabis;
 
-            // Update Total Stok di Stat Card ketiga
-            const totalStokEl = document.querySelector(".stats-grid .stat-card:nth-child(3) .stat-value");
-            if (totalStokEl) {
-                totalStokEl.textContent = statsState.totalStok.toLocaleString("id-ID");
-            }
-
-            // Update Peringatan Hampir Habis di Stat Card ketiga
-            const trendWarnEl = document.querySelector(".stats-grid .stat-card:nth-child(3) .stat-trend");
-            if (trendWarnEl) {
-                trendWarnEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${statsState.hampirHabis} produk hampir habis`;
-            }
+            setText("stat-dash-omset", "Rp " + omset.toLocaleString("id-ID"));
+            setTrend("stat-dash-omset-trend", "fa-solid fa-circle-check", lunas + " transaksi lunas");
+            setText("stat-dash-produk", products.length.toLocaleString("id-ID"));
+            setTrend("stat-dash-produk-trend", "fa-solid fa-box", "Jenis produk terdaftar");
+            setText("stat-dash-stok", totalStok.toLocaleString("id-ID"));
+            setTrend("stat-dash-stok-trend", "fa-solid fa-triangle-exclamation", hampirHabis + " produk hampir habis");
+            setText("stat-dash-trx", transactions.length.toLocaleString("id-ID"));
+            setTrend("stat-dash-trx-trend", "fa-solid fa-hourglass-half", pending + " menunggu pembayaran");
         }
 
         // Jalankan sinkronisasi awal
         syncDashboardStats();
+
+        // Auto-refresh dari database tiap 15 detik (dan saat tab kembali aktif)
+        let refreshing = false;
+        function refreshFromServer() {
+            if (refreshing || document.hidden) return;
+            let outbox = [];
+            try { outbox = JSON.parse(localStorage.getItem("optiware_outbox") || "[]"); } catch (e) {}
+            if (outbox.length) return; // masih ada perubahan lokal yang belum terkirim
+            refreshing = true;
+            fetch("/api/sync", { credentials: "same-origin" })
+                .then(function (r) {
+                    if (r.status === 401) { window.location.href = "/"; return null; }
+                    return r.ok ? r.json() : null;
+                })
+                .then(function (d) {
+                    if (!d) return;
+                    const table = $$("table_produk");
+                    if (table) {
+                        table.clearAll();
+                        table.parse(d.products || []);
+                    }
+                    renderStats(d.products || [], d.transactions || []);
+                })
+                .catch(function () {})
+                .then(function () { refreshing = false; });
+        }
+        setInterval(refreshFromServer, 15000);
+        document.addEventListener("visibilitychange", refreshFromServer);
 
         // ------------------------------------------------------------
         // 12. PENGHUBUNG EVENT ELEMEN DARI INDEX.HTML

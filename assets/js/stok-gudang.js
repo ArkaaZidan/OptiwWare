@@ -50,8 +50,7 @@ function getStoredProducts() {
     } catch (e) {
         console.warn("Gagal membaca localStorage produk:", e);
     }
-    saveStoredProducts(defaultProducts);
-    return defaultProducts;
+    return [];
 }
 
 function saveStoredProducts(data) {
@@ -74,8 +73,7 @@ function getStoredLogs() {
     } catch (e) {
         console.warn("Gagal membaca localStorage log:", e);
     }
-    saveStoredLogs(defaultLogs);
-    return defaultLogs;
+    return [];
 }
 
 function saveStoredLogs(data) {
@@ -779,6 +777,8 @@ if (typeof webix === "undefined") {
 
             const countEl = document.getElementById("log-count-info");
             if (countEl) countEl.textContent = `${logs.length} Mutasi Tercatat`;
+
+            syncStorageAndMetrics();
         }
 
         // ------------------------------------------------------------
@@ -789,24 +789,35 @@ if (typeof webix === "undefined") {
             if (!table) return;
 
             const allProducts = [];
-            let totalFisik = 0;
-            let totalKapasitas = 0;
-
+            let totalFisik = 0, totalKapasitas = 0;
             table.data.each(function (obj) {
                 allProducts.push(obj);
                 totalFisik += (parseInt(obj.stok, 10) || 0);
                 totalKapasitas += (parseInt(obj.kapasitas, 10) || 150);
             });
-
             saveStoredProducts(allProducts);
 
-            // Update DOM Statistik
-            const elTotalFisik = document.getElementById("stat-total-fisik");
-            if (elTotalFisik) elTotalFisik.textContent = totalFisik.toLocaleString("id-ID");
+            // Stok masuk / keluar hari ini dihitung dari log mutasi
+            const hariIni = getFormattedNow().slice(0, 11); // "DD Mon YYYY"
+            let masuk = 0, keluar = 0;
+            const logTable = $$("table_log_mutasi");
+            if (logTable) {
+                logTable.data.each(function (l) {
+                    if (!l.waktu || String(l.waktu).slice(0, 11) !== hariIni) return;
+                    const q = Math.abs(parseInt(l.qty, 10) || 0);
+                    if (l.tipe === "inbound") masuk += q;
+                    else if (l.tipe === "outbound") keluar += q;
+                });
+            }
 
-            const okupansiPersen = totalKapasitas > 0 ? Math.round((totalFisik / totalKapasitas) * 100) : 0;
-            const elOkupansi = document.getElementById("stat-okupansi");
-            if (elOkupansi) elOkupansi.textContent = okupansiPersen + "%";
+            const set = function (id, v) { const e = document.getElementById(id); if (e) e.textContent = v; };
+            set("stat-total-fisik", totalFisik.toLocaleString("id-ID"));
+            set("stat-okupansi", (totalKapasitas ? Math.round(totalFisik / totalKapasitas * 100) : 0) + "%");
+            set("stat-masuk-hari-ini", "+" + masuk.toLocaleString("id-ID"));
+            set("stat-keluar-hari-ini", "-" + keluar.toLocaleString("id-ID"));
+
+            const tr = document.getElementById("stat-okupansi-trend");
+            if (tr) tr.innerHTML = '<i class="fa-solid fa-check"></i> Dari kapasitas ' + totalKapasitas.toLocaleString("id-ID") + ' unit';
         }
 
         // Jalankan sinkronisasi awal

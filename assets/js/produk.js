@@ -157,9 +157,7 @@ function getStoredProducts() {
     } catch (e) {
         console.warn("Gagal membaca localStorage:", e);
     }
-    // Jika belum ada data, simpan data default
-    saveStoredProducts(defaultProducts);
-    return defaultProducts;
+    return [];
 }
 
 // Helper: Simpan data ke localStorage

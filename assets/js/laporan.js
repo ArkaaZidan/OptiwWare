@@ -22,13 +22,7 @@ function getStoredProducts() {
     } catch (e) {
         console.warn(e);
     }
-    return [
-        { id: 1, kode: "OPT-001", nama: "Indomie Goreng 85g", kategori: "Makanan", hargaBeli: 2800, hargaJual: 3500, stok: 120 },
-        { id: 2, kode: "OPT-002", nama: "Aqua 600ml", kategori: "Minuman", hargaBeli: 2500, hargaJual: 3500, stok: 45 },
-        { id: 3, kode: "OPT-003", nama: "Mie Sedaap 75g", kategori: "Makanan", hargaBeli: 2700, hargaJual: 3300, stok: 10 },
-        { id: 4, kode: "OPT-004", nama: "Telur Ayam 1kg", kategori: "Bahan Pokok", hargaBeli: 24000, hargaJual: 28000, stok: 5 },
-        { id: 5, kode: "OPT-005", nama: "Minyak Goreng 1L", kategori: "Bahan Pokok", hargaBeli: 15500, hargaJual: 18500, stok: 28 }
-    ];
+    return [];
 }
 
 function getStoredTransactions() {
@@ -214,43 +208,35 @@ if (typeof webix === "undefined") {
             const products = getStoredProducts();
             const txList = getStoredTransactions();
 
-            // Hitung Valuasi Aset Stok di Gudang
+            const modalByNama = {};
             let totalValuasiAset = 0;
             products.forEach(p => {
-                totalValuasiAset += ((p.stok || 0) * (p.hargaBeli || 0));
+                modalByNama[p.nama] = p.hargaBeli || 0;
+                totalValuasiAset += (p.stok || 0) * (p.hargaBeli || 0);
             });
 
-            // Hitung Penjualan dari Transaksi (jika ada data transaksi lunas)
-            let totalOmset = 12450000;
-            let totalHpp = 8820000;
-            let totalLaba = 3630000;
-
-            if (txList.length > 0) {
-                let sumOmset = 0;
-                txList.forEach(t => {
-                    if (t.status === "Selesai") {
-                        sumOmset += (t.total || 0);
-                    }
+            let totalOmset = 0, totalHpp = 0;
+            txList.forEach(t => {
+                if (t.status !== "Selesai") return;
+                totalOmset += (t.total || 0);
+                (t.items || []).forEach(it => {
+                    totalHpp += (modalByNama[it.nama] || 0) * (it.qty || 0);
                 });
-                if (sumOmset > 0) {
-                    totalOmset = sumOmset;
-                    totalHpp = Math.round(totalOmset * 0.708);
-                    totalLaba = totalOmset - totalHpp;
-                }
-            }
+            });
+            const totalLaba = totalOmset - totalHpp;
+            const persenHpp = totalOmset ? (totalHpp / totalOmset * 100).toFixed(1) : "0";
+            const margin = totalOmset ? (totalLaba / totalOmset * 100).toFixed(1) : "0";
 
-            // Update DOM
-            const elOmset = document.getElementById("stat-total-omset");
-            if (elOmset) elOmset.textContent = formatRupiah(totalOmset);
+            const set = function (id, v) { const e = document.getElementById(id); if (e) e.textContent = v; };
+            set("stat-total-omset", formatRupiah(totalOmset));
+            set("stat-total-hpp", formatRupiah(totalHpp));
+            set("stat-total-laba", formatRupiah(totalLaba));
+            set("stat-total-aset", formatRupiah(totalValuasiAset));
 
-            const elHpp = document.getElementById("stat-total-hpp");
-            if (elHpp) elHpp.textContent = formatRupiah(totalHpp);
-
-            const elLaba = document.getElementById("stat-total-laba");
-            if (elLaba) elLaba.textContent = formatRupiah(totalLaba);
-
-            const elAset = document.getElementById("stat-total-aset");
-            if (elAset) elAset.textContent = formatRupiah(totalValuasiAset > 0 ? totalValuasiAset : 18250000);
+            const h = document.getElementById("stat-hpp-trend");
+            if (h) h.innerHTML = '<i class="fa-solid fa-circle-info"></i> ' + persenHpp + '% dari omset';
+            const l = document.getElementById("stat-laba-trend");
+            if (l) l.innerHTML = '<i class="fa-solid fa-percent"></i> Margin laba ' + margin + '%';
         }
 
         syncRealMetrics();

@@ -162,18 +162,12 @@ const defaultTransactions = [
 
 function getStoredTransactions() {
     try {
-        const stored = localStorage.getItem(STORAGE_KEY_TRANSACTIONS);
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-                return parsed;
-            }
-        }
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY_TRANSACTIONS) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
         console.warn("Gagal membaca localStorage transaksi:", e);
+        return [];
     }
-    saveStoredTransactions(defaultTransactions);
-    return defaultTransactions;
 }
 
 function saveStoredTransactions(data) {
@@ -998,6 +992,12 @@ if (typeof webix === "undefined") {
 
             const elPending = document.getElementById("stat-pending");
             if (elPending) elPending.textContent = pendingCount;
+
+            const elLunasTrend = document.getElementById("stat-lunas-trend");
+            if (elLunasTrend) {
+                const persen = allTx.length ? (lunasCount / allTx.length * 100).toFixed(1) : "0";
+                elLunasTrend.innerHTML = '<i class="fa-solid fa-check-double"></i> ' + persen + '% tingkat sukses';
+            }
 
             const elInfo = document.getElementById("trx-count-info");
             if (elInfo) elInfo.textContent = `Menampilkan ${allTx.length} transaksi`;
