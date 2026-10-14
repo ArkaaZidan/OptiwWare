@@ -334,11 +334,35 @@ if (typeof webix === "undefined") {
                 if (currentActiveTab === "category") filename = "Laporan_Laba_Kategori_OptiWare";
                 else if (currentActiveTab === "bestseller") filename = "Laporan_Best_Seller_OptiWare";
 
-                webix.toExcel($$("table_laporan_utama"), {
-                    filename: filename,
-                    name: "Laporan"
-                });
-                webix.message({ type: "success", text: "Data laporan diekspor ke Excel" });
+                var kolomLaporan = {
+                    sales: [
+                        { header: "Tanggal / Periode", nilai: o => o.tanggal },
+                        { header: "Transaksi", nilai: o => o.trx },
+                        { header: "Total Omset", nilai: o => o.omset },
+                        { header: "Beban Modal (HPP)", nilai: o => o.hpp },
+                        { header: "Laba Kotor", nilai: o => o.laba },
+                        { header: "Margin (%)", nilai: o => o.margin },
+                        { header: "Status Target", nilai: o => o.target }
+                    ],
+                    category: [
+                        { header: "Kategori Produk", nilai: o => o.kategori },
+                        { header: "Vol. Terjual", nilai: o => o.terjual },
+                        { header: "Total Omset", nilai: o => o.omset },
+                        { header: "Beban Pokok (HPP)", nilai: o => o.hpp },
+                        { header: "Estimasi Laba", nilai: o => o.laba },
+                        { header: "Margin Rata-rata (%)", nilai: o => o.margin }
+                    ],
+                    bestseller: [
+                        { header: "Rank", nilai: o => o.rank },
+                        { header: "SKU", nilai: o => o.kode },
+                        { header: "Nama Produk", nilai: o => o.nama },
+                        { header: "Kategori", nilai: o => o.kategori },
+                        { header: "Vol. Terjual", nilai: o => o.qty },
+                        { header: "Total Omset", nilai: o => o.omset },
+                        { header: "Kontribusi Laba", nilai: o => o.laba }
+                    ]
+                };
+                window.optiwareExportCSV("table_laporan_utama", kolomLaporan[currentActiveTab] || kolomLaporan.sales, filename);
             });
         }
 

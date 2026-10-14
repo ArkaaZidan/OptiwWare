@@ -1067,11 +1067,16 @@ if (typeof webix === "undefined") {
         const btnExport = document.getElementById("btn-export-transaksi");
         if (btnExport) {
             btnExport.addEventListener("click", function () {
-                webix.toExcel($$("table_transaksi"), {
-                    filename: "OptiWare_Transaksi_Penjualan",
-                    name: "Transaksi"
-                });
-                webix.message({ type: "success", text: "Data transaksi diekspor ke Excel" });
+                window.optiwareExportCSV("table_transaksi", [
+                    { header: "No", nilai: (o, n) => n },
+                    { header: "No. Faktur", nilai: o => o.invoice },
+                    { header: "Waktu Transaksi", nilai: o => o.waktu },
+                    { header: "Pelanggan", nilai: o => o.pelanggan || "Umum" },
+                    { header: "Rincian Item", nilai: o => Array.isArray(o.items) ? o.items.map(i => i.nama + " (" + i.qty + "x)").join(", ") : "" },
+                    { header: "Total Tagihan", nilai: o => o.total },
+                    { header: "Metode Bayar", nilai: o => o.metode },
+                    { header: "Status", nilai: o => o.status }
+                ], "OptiWare_Transaksi_Penjualan");
             });
         }
 

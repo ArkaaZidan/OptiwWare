@@ -934,23 +934,19 @@ if (typeof webix === "undefined") {
         const btnExportExcel = document.getElementById("btn-export-excel");
         if (btnExportExcel) {
             btnExportExcel.addEventListener("click", function () {
-                webix.toExcel($$("table_produk_master"), {
-                    filename: "OptiWare_Katalog_Produk",
-                    name: "Produk",
-                    columns: {
-                        "kode": { header: "Kode SKU", width: 15 },
-                        "nama": { header: "Nama Produk", width: 30 },
-                        "kategori": { header: "Kategori", width: 20 },
-                        "hargaBeli": { header: "Harga Beli", width: 15 },
-                        "hargaJual": { header: "Harga Jual", width: 15 },
-                        "stok": { header: "Stok", width: 10 },
-                        "satuan": { header: "Satuan", width: 12 },
-                        "status": { header: "Status", width: 15 },
-                        "rak": { header: "Lokasi Rak", width: 20 },
-                        "supplier": { header: "Supplier", width: 25 }
-                    }
-                });
-                webix.message({ type: "success", text: "Data produk diekspor ke Excel" });
+                window.optiwareExportCSV("table_produk_master", [
+                    { header: "No", nilai: (o, n) => n },
+                    { header: "Kode SKU", nilai: o => o.kode || ("OPT-00" + o.id) },
+                    { header: "Nama Produk", nilai: o => o.nama },
+                    { header: "Kategori", nilai: o => o.kategori },
+                    { header: "Harga Beli", nilai: o => o.hargaBeli },
+                    { header: "Harga Jual", nilai: o => o.hargaJual },
+                    { header: "Stok", nilai: o => o.stok },
+                    { header: "Satuan", nilai: o => o.satuan || "Pcs" },
+                    { header: "Status", nilai: o => o.status },
+                    { header: "Lokasi Rak", nilai: o => o.rak },
+                    { header: "Supplier", nilai: o => o.supplier }
+                ], "OptiWare_Katalog_Produk");
             });
         }
 

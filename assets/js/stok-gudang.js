@@ -860,11 +860,16 @@ if (typeof webix === "undefined") {
         const btnExportStok = document.getElementById("btn-export-stok");
         if (btnExportStok) {
             btnExportStok.addEventListener("click", function () {
-                webix.toExcel($$("table_stok_gudang"), {
-                    filename: "OptiWare_Stok_Gudang",
-                    name: "StokGudang"
-                });
-                webix.message({ type: "success", text: "Data stok gudang diekspor ke Excel" });
+                window.optiwareExportCSV("table_stok_gudang", [
+                    { header: "No", nilai: (o, n) => n },
+                    { header: "Kode SKU", nilai: o => o.kode || ("OPT-00" + o.id) },
+                    { header: "Nama Produk", nilai: o => o.nama },
+                    { header: "Lokasi Rak & Gudang", nilai: o => o.rak || "Gudang A - Rak 01" },
+                    { header: "Stok Fisik", nilai: o => o.stok },
+                    { header: "Kapasitas", nilai: o => o.kapasitas || 150 },
+                    { header: "Okupansi (%)", nilai: o => Math.min(100, Math.round(((o.stok || 0) / (o.kapasitas || 150)) * 100)) },
+                    { header: "Status", nilai: o => o.status }
+                ], "OptiWare_Stok_Gudang");
             });
         }
 
