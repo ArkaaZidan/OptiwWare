@@ -264,12 +264,23 @@
       color: var(--text-muted)
     }
 
-    .switch a {
-      border: 0;
-      background: none;
+    .switch a.register-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 5px;
+      padding: 7px 13px;
+      border: 1px solid #168d5c;
+      border-radius: 8px;
+      background: #fff;
       color: #107349;
       font-weight: 800;
-      padding: 4px
+      text-decoration: none;
+      transition: background .2s ease, color .2s ease
+    }
+
+    .switch a.register-link:hover {
+      background: var(--primary-light);
     }
 
     .notice {
@@ -370,7 +381,7 @@
                 aria-hidden="true">→</span></button>
           </form>
           <div class="notice" id="notice" role="status"></div>
-          <div class="switch" id="registerSwitch" hidden>Belum memiliki akun? <a href="/register">Daftar di sini</a></div>
+          <div class="switch">Belum memiliki akun? <a class="register-link" href="/register">Daftar</a></div>
           <div class="security"><span>▣</span> Gunakan akun admin untuk masuk</div>
         </section>
       </div>
@@ -382,7 +393,6 @@
       const emailInput = document.getElementById('email');
       const passwordInput = document.getElementById('password');
       const submitBtn = document.getElementById('submitBtn');
-      const registerSwitch = document.getElementById('registerSwitch');
       const notice = document.getElementById('notice');
 
       function showNotice(message, type = 'error') {
@@ -390,16 +400,6 @@
         notice.className = `notice ${type}`;
       }
       function clearNotice() { notice.textContent = ''; notice.className = 'notice'; }
-      async function checkSetup() {
-        try {
-          const response = await fetch('/api/setup-status');
-          const body = await response.json();
-          if (!response.ok) throw new Error(body.pesan || 'Koneksi database belum siap.');
-          registerSwitch.hidden = !body.needsSetup;
-        } catch (_) {
-          registerSwitch.hidden = true;
-        }
-      }
       form.addEventListener('submit', async (event) => {
         event.preventDefault(); clearNotice(); submitBtn.disabled = true; submitBtn.textContent = 'Memproses...';
         const payload = { username: emailInput.value.trim(), password: passwordInput.value };
@@ -417,7 +417,6 @@
           submitBtn.textContent = 'Masuk';
         }
       });
-      checkSetup();
     })();
   </script>
 </body>
