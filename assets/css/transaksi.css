@@ -355,6 +355,78 @@
     padding-top: 12px;
 }
 
+/* Cetak hanya isi struk pada kertas 4 x 6 inci. */
+@page {
+    size: 4in 6in;
+    margin: 0;
+}
+
+@media print {
+    html,
+    body {
+        width: 4in !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        background: #fff !important;
+    }
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    #printable-receipt,
+    #printable-receipt * {
+        visibility: visible !important;
+    }
+
+    #printable-receipt {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0.15in !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        color: #111 !important;
+        font: 11px/1.4 Arial, sans-serif !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    #printable-receipt .receipt-store-name {
+        color: #111 !important;
+        font-size: 16px !important;
+    }
+
+    #printable-receipt .receipt-store-sub,
+    #printable-receipt .receipt-meta,
+    #printable-receipt .receipt-table th,
+    #printable-receipt .receipt-table td,
+    #printable-receipt .receipt-total-row,
+    #printable-receipt .receipt-footer {
+        color: #111 !important;
+        font-size: 10px !important;
+    }
+
+    #printable-receipt .receipt-table {
+        page-break-inside: auto;
+    }
+
+    #printable-receipt tr,
+    #printable-receipt .receipt-totals,
+    #printable-receipt .receipt-footer {
+        page-break-inside: avoid;
+    }
+}
+
+/* --- WEBIX PAGER WRAPPER --- */
 .pager-wrapper {
     margin-top: 16px;
     display: flex;

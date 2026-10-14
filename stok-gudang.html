@@ -1,198 +1,259 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stok Gudang - OptiWare</title>
-    
+
     <!-- Webix CSS -->
-    <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css">
-    
+    <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css" />
+
     <!-- Font Awesome untuk Ikon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <!-- Google Fonts untuk tipografi Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Base CSS (dari dashboard) -->
-    <link rel="stylesheet" href="assets/css/universal.css">
-    
+    <link rel="stylesheet" href="assets/css/universal.css" />
+
     <!-- Custom CSS terpisah khusus Halaman Stok Gudang -->
-    <link rel="stylesheet" href="assets/css/stok-gudang.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="assets/css/stok-gudang.css" />
+  </head>
+  <body>
     <div class="app-container">
-        <aside class="sidebar" id="app-sidebar">
-            <div class="logo-container">
-                <img src="assets/images/Widhi-removebg-preview.png" alt="Widhi" class="logo-image">
-            </div>
-            
-            <nav class="nav-menu">
-                <a href="index.html" class="nav-item">
-                    <i class="fa-solid fa-house"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="produk.html" class="nav-item">
-                    <i class="fa-solid fa-box-open"></i>
-                    <span>Produk</span>
-                </a>
-                <a href="stok-gudang.html" class="nav-item active">
-                    <i class="fa-solid fa-boxes-stacked"></i>
-                    <span>Stok Gudang</span>
-                </a>
-                <a href="transaksi.html" class="nav-item">
-                    <i class="fa-solid fa-file-invoice"></i>
-                    <span>Transaksi</span>
-                </a>
-                <a href="laporan.html" class="nav-item">
-                    <i class="fa-solid fa-chart-line"></i>
-                    <span>Laporan</span>
-                </a>
-                <a href="pengaturan.html" class="nav-item">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Pengaturan</span>
-                </a>
-            </nav>
+      <!-- SIDEBAR (Stok Gudang Aktif) -->
+      <aside class="sidebar" id="app-sidebar">
+        <div class="logo-container">
+          <img
+            src="assets/images/Widhi-removebg-preview.png"
+            alt="Widhi"
+            class="logo-image"
+          />
+        </div>
 
-            <div class="sidebar-bottom">
-                <a href="#" class="nav-item" id="sidebar-logout-btn">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>Keluar</span>
-                </a>
-            </div>
-        </aside>
+        <nav class="nav-menu">
+          <a href="index.html" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="produk.html" class="nav-item">
+            <i class="fa-solid fa-box-open"></i>
+            <span>Produk</span>
+          </a>
+          <a href="stok-gudang.html" class="nav-item active">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <span>Stok Gudang</span>
+          </a>
+          <a href="transaksi.html" class="nav-item">
+            <i class="fa-solid fa-file-invoice"></i>
+            <span>Transaksi</span>
+          </a>
+          <a href="laporan.html" class="nav-item">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Laporan</span>
+          </a>
+          <a href="pengaturan.html" class="nav-item">
+            <i class="fa-solid fa-gear"></i>
+            <span>Pengaturan</span>
+          </a>
+        </nav>
 
-        <main class="main-content">
-            <header class="topbar">
-                <button class="mobile-menu-toggle" type="button" aria-controls="app-sidebar" aria-expanded="false" aria-label="Buka menu navigasi">
-                    <i class="fa-solid fa-bars" aria-hidden="true"></i>
-                </button>
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="topbar-search-gudang" placeholder="Cari nama produk, SKU, lokasi rak, atau gudang...">
-                </div>
-                
-                <div class="topbar-right">
-                    <div class="user-profile" id="topbar-profile-btn">
-                        <div class="avatar">A</div>
-                        <div class="user-info">
-                            <span class="user-name">Admin</span>
-                            <span class="user-role">Administrator</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-down text-muted"></i>
-                    </div>
-                </div>
-            </header>
+        <div class="sidebar-bottom">
+          <a href="#" class="nav-item" id="sidebar-logout-btn">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Keluar</span>
+          </a>
+        </div>
+      </aside>
 
-            <div class="page-header">
-                <div>
-                    <h1 class="page-title">Manajemen Stok Gudang</h1>
-                    <p class="page-subtitle">Monitoring kapasitas rak, mutasi barang masuk/keluar, dan penempatan inventaris fisik</p>
-                </div>
-                <div class="header-buttons">
-                    <button type="button" class="btn-outline-danger" id="btn-stok-keluar">
-                        <i class="fa-solid fa-arrow-up-from-bracket"></i> Catat Stok Keluar
-                    </button>
-                    <button type="button" class="btn-outline-success" id="btn-stok-masuk">
-                        <i class="fa-solid fa-arrow-down-to-bracket"></i> Catat Stok Masuk
-                    </button>
-                    <button type="button" class="btn-primary" id="btn-stock-opname">
-                        <i class="fa-solid fa-clipboard-check"></i> Stock Opname
-                    </button>
-                </div>
-            </div>
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- TOPBAR -->
+        <header class="topbar">
+          <button
+            class="mobile-menu-toggle"
+            type="button"
+            aria-controls="app-sidebar"
+            aria-expanded="false"
+            aria-label="Buka menu navigasi"
+          >
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+          </button>
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              id="topbar-search-gudang"
+              placeholder="Cari nama produk, SKU, lokasi rak, atau gudang..."
+            />
+          </div>
 
-            <div class="stats-grid gudang-stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fa-solid fa-warehouse"></i></div>
-                    <div class="stat-details">
-                        <p class="stat-title">Total Stok Fisik</p>
-                        <h3 class="stat-value" id="stat-total-fisik">0</h3>
-                        <p class="stat-trend trend-up"><i class="fa-solid fa-cubes"></i> Total unit tersimpan</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon icon-capacity"><i class="fa-solid fa-chart-pie"></i></div>
-                    <div class="stat-details">
-                        <p class="stat-title">Okupansi Rak</p>
-                        <h3 class="stat-value" id="stat-okupansi">0%</h3>
-                        <p class="stat-trend trend-up" id="stat-okupansi-trend"><i class="fa-solid fa-check"></i> Dari kapasitas 0 unit</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon icon-success"><i class="fa-solid fa-circle-arrow-down"></i></div>
-                    <div class="stat-details">
-                        <p class="stat-title">Stok Masuk (Hari Ini)</p>
-                        <h3 class="stat-value" id="stat-masuk-hari-ini">+0</h3>
-                        <p class="stat-trend trend-up"><i class="fa-solid fa-truck-ramp-box"></i> Pasokan baru</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon icon-warn"><i class="fa-solid fa-circle-arrow-up"></i></div>
-                    <div class="stat-details">
-                        <p class="stat-title">Stok Keluar (Hari Ini)</p>
-                        <h3 class="stat-value" id="stat-keluar-hari-ini">-0</h3>
-                        <p class="stat-trend trend-warn"><i class="fa-solid fa-cart-flatbed"></i> Distribusi ritel</p>
-                    </div>
-                </div>
+          <div class="topbar-right">
+            <div class="user-profile" id="topbar-profile-btn">
+              <div class="avatar">A</div>
+              <div class="user-info">
+                <span class="user-name">Admin</span>
+                <span class="user-role">Administrator</span>
+              </div>
+              <i class="fa-solid fa-chevron-down text-muted"></i>
             </div>
+          </div>
+        </header>
 
-            <div class="warehouse-zones">
-                <div class="zone-tab active" data-zone="">
-                    <i class="fa-solid fa-building"></i>
-                    <span>Semua Zona</span>
-                </div>
-                <div class="zone-tab" data-zone="Gudang A">
-                    <i class="fa-solid fa-box"></i>
-                    <span>Gudang A (Makanan & Minuman)</span>
-                </div>
-                <div class="zone-tab" data-zone="Gudang B">
-                    <i class="fa-solid fa-boxes-packing"></i>
-                    <span>Gudang B (Sembako)</span>
-                </div>
-                <div class="zone-tab" data-zone="Gudang C">
-                    <i class="fa-solid fa-wheat-awn"></i>
-                    <span>Gudang C (Bahan Pokok)</span>
-                </div>
-                <div class="zone-tab" data-zone="Gudang D">
-                    <i class="fa-solid fa-pump-soap"></i>
-                    <span>Gudang D (Non-Food)</span>
-                </div>
-            </div>
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Manajemen Stok Gudang</h1>
+            <p class="page-subtitle">
+              Monitoring kapasitas rak, mutasi barang masuk/keluar, dan
+              penempatan inventaris fisik
+            </p>
+          </div>
+          <div class="header-buttons">
+            <button
+              type="button"
+              class="btn-outline-danger"
+              id="btn-stok-keluar"
+            >
+              <i class="fa-solid fa-arrow-up-from-bracket"></i> Catat Stok
+              Keluar
+            </button>
+            <button
+              type="button"
+              class="btn-outline-success"
+              id="btn-stok-masuk"
+            >
+              <i class="fa-solid fa-arrow-down-to-bracket"></i> Catat Stok Masuk
+            </button>
+            <button type="button" class="btn-primary" id="btn-stock-opname">
+              <i class="fa-solid fa-clipboard-check"></i> Stock Opname
+            </button>
+          </div>
+        </div>
 
-            <div class="table-section">
-                <div class="table-header">
-                    <h2>Penempatan & Stok Rak Gudang</h2>
-                    <div class="table-actions-right">
-                        <button type="button" class="btn-secondary-sm" id="btn-export-stok">
-                            <i class="fa-solid fa-file-csv"></i> Export CSV
-                        </button>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <div id="gudang-table-container"></div>
-                </div>
-                <div id="gudang-pager-container" class="pager-wrapper"></div>
+        <!-- WAREHOUSE OVERVIEW CARDS -->
+        <div class="stats-grid gudang-stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-warehouse"></i></div>
+            <div class="stat-details">
+              <p class="stat-title">Total Stok Fisik</p>
+              <h3 class="stat-value" id="stat-total-fisik">0</h3>
+              <p class="stat-trend trend-up">
+                <i class="fa-solid fa-cubes"></i> Total unit tersimpan
+              </p>
             </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon icon-capacity">
+              <i class="fa-solid fa-chart-pie"></i>
+            </div>
+            <div class="stat-details">
+              <p class="stat-title">Okupansi Rak</p>
+              <h3 class="stat-value" id="stat-okupansi">0%</h3>
+              <p class="stat-trend trend-up">
+                <i class="fa-solid fa-check"></i> Dari kapasitas 2.500 unit
+              </p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon icon-success">
+              <i class="fa-solid fa-circle-arrow-down"></i>
+            </div>
+            <div class="stat-details">
+              <p class="stat-title">Stok Masuk (Hari Ini)</p>
+              <h3 class="stat-value" id="stat-masuk-hari-ini">+120</h3>
+              <p class="stat-trend trend-up">
+                <i class="fa-solid fa-truck-ramp-box"></i> Pasokan baru
+              </p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon icon-warn">
+              <i class="fa-solid fa-circle-arrow-up"></i>
+            </div>
+            <div class="stat-details">
+              <p class="stat-title">Stok Keluar (Hari Ini)</p>
+              <h3 class="stat-value" id="stat-keluar-hari-ini">-45</h3>
+              <p class="stat-trend trend-warn">
+                <i class="fa-solid fa-cart-flatbed"></i> Distribusi ritel
+              </p>
+            </div>
+          </div>
+        </div>
 
-            <div class="table-section log-section">
-                <div class="table-header">
-                    <h2>Riwayat Aktivitas Mutasi Terkini</h2>
-                    <span class="product-count-label" id="log-count-info">Memuat log...</span>
-                </div>
-                <div class="table-responsive">
-                    <div id="log-table-container"></div>
-                </div>
+        <!-- WAREHOUSE ZONES TABS -->
+        <div class="warehouse-zones">
+          <div class="zone-tab active" data-zone="">
+            <i class="fa-solid fa-building"></i>
+            <span>Semua Zona</span>
+          </div>
+          <div class="zone-tab" data-zone="Gudang A">
+            <i class="fa-solid fa-box"></i>
+            <span>Gudang A (Makanan & Minuman)</span>
+          </div>
+          <div class="zone-tab" data-zone="Gudang B">
+            <i class="fa-solid fa-boxes-packing"></i>
+            <span>Gudang B (Sembako)</span>
+          </div>
+          <div class="zone-tab" data-zone="Gudang C">
+            <i class="fa-solid fa-wheat-awn"></i>
+            <span>Gudang C (Bahan Pokok)</span>
+          </div>
+          <div class="zone-tab" data-zone="Gudang D">
+            <i class="fa-solid fa-pump-soap"></i>
+            <span>Gudang D (Non-Food)</span>
+          </div>
+        </div>
+
+        <!-- TABLE SECTION: RACK INVENTORY -->
+        <div class="table-section">
+          <div class="table-header">
+            <h2>Penempatan & Stok Rak Gudang</h2>
+            <div class="table-actions-right">
+              <button
+                type="button"
+                class="btn-secondary-sm"
+                id="btn-export-stok"
+              >
+                <i class="fa-solid fa-file-excel"></i> Export Excel
+              </button>
             </div>
-        </main>
+          </div>
+          <div class="table-responsive">
+            <div id="gudang-table-container"></div>
+          </div>
+          <div id="gudang-pager-container" class="pager-wrapper"></div>
+        </div>
+
+        <!-- TABLE SECTION: MUTATION LOG -->
+        <div class="table-section log-section">
+          <div class="table-header">
+            <h2>Riwayat Aktivitas Mutasi Terkini</h2>
+            <span class="product-count-label" id="log-count-info"
+              >Memuat log...</span
+            >
+          </div>
+          <div class="table-responsive">
+            <div id="log-table-container"></div>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script src="https://cdn.webix.com/edge/webix.js"></script>
+
+    <!-- Custom Stok Gudang JS terpisah -->
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/export-csv.js"></script>
     <script src="assets/js/sync.js"></script>
     <script src="assets/js/stok-gudang.js"></script>
     <script src="assets/js/mobile-menu.js"></script>
-</body>
+  </body>
 </html>

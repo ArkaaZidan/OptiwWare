@@ -1,421 +1,218 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daftar - OptiWare</title>
-  <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css" type="text/css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
-  <style>
-    :root {
-      --primary: #168d5c;
-      --primary-light: #e9f5ed;
-      --sidebar-bg: #0b4263;
-      --sidebar-hover: #164f6e;
-      --bg-color: #f8fafc;
-      --text-main: #0b4263;
-      --text-muted: #5f7785;
-      --ink: var(--text-main)
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    body {
-      margin: 0;
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg-color);
-      color: var(--ink);
-      min-height: 100vh
-    }
-
-    .page {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: minmax(320px, 1fr) minmax(360px, 0.95fr)
-    }
-
-    .hero {
-      background: linear-gradient(145deg, #eaf2f5 0%, #eef6f1 70%, #e4f0e8 140%);
-      padding: 56px clamp(28px, 6vw, 88px);
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: clamp(42px, 8vh, 72px);
-      overflow: hidden;
-      position: relative
-    }
-
-    .hero:after {
-      content: "";
-      position: absolute;
-      width: 460px;
-      height: 460px;
-      border: 1px solid rgba(11, 66, 99, .10);
-      border-radius: 50%;
-      right: -210px;
-      bottom: -130px;
-      box-shadow: 0 0 0 55px rgba(11, 66, 99, .025), 0 0 0 110px rgba(11, 66, 99, .02)
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-      margin-bottom: 12px;
-      position: relative;
-      z-index: 1
-    }
-
-    .brand-name {
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: -.8px;
-      color: var(--text-main)
-    }
-
-    .brand-name .brand-ware {
-      color: #58b883;
-    }
-
-    .brand-sub {
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: #5f7785;
-      text-transform: uppercase;
-      margin-top: 2px
-    }
-
-    .hero-copy {
-      max-width: 600px;
-      position: relative;
-      z-index: 1;
-      margin: 0
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: #168d5c;
-      font-size: 12px;
-      letter-spacing: 1.4px;
-      text-transform: uppercase;
-      font-weight: 700
-    }
-
-    .eyebrow:before {
-      content: none
-    }
-
-    .hero h1 {
-      font-size: clamp(36px, 4.5vw, 60px);
-      line-height: 1.06;
-      letter-spacing: -2px;
-      margin: 23px 0 20px;
-      max-width: 530px
-    }
-
-    .hero p {
-      color: #4c6574;
-      font-size: 16px;
-      line-height: 1.8;
-      max-width: 460px;
-      margin: 0
-    }
-
-    .feature-list {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 42px;
-      max-width: 580px
-    }
-
-    .feature {
-      border: 1px solid rgba(11, 66, 99, .12);
-      background: rgba(255, 255, 255, .62);
-      padding: 15px 13px;
-      border-radius: 12px
-    }
-
-    .feature-icon {
-      color: #168d5c;
-      font-size: 18px
-    }
-
-    .feature strong {
-      display: block;
-      font-size: 12px;
-      margin-top: 11px
-    }
-
-    .feature span {
-      display: block;
-      color: #5f7785;
-      font-size: 11px;
-      margin-top: 5px;
-      line-height: 1.5
-    }
-
-    .hero-foot {
-      position: relative;
-      z-index: 1;
-      color: #6b8491;
-      font-size: 12px
-    }
-
-    .right {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 38px 24px
-    }
-
-    .login-card {
-      width: min(420px, 100%);
-      background: #fff;
-      border: 1px solid #e5ebf1;
-      border-radius: 22px;
-      padding: 38px;
-      box-shadow: 0 20px 70px rgba(31, 55, 80, .08)
-    }
-
-    .mobile-brand {
-      display: none
-    }
-
-    .card-overline {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--primary);
-      font-weight: 800
-    }
-
-    .login-card h2 {
-      font-size: 29px;
-      letter-spacing: -.8px;
-      margin: 10px 0 8px
-    }
-
-    .intro {
-      margin: 0 0 26px;
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.65
-    }
-
-    .field {
-      margin: 15px 0
-    }
-
-    .field label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      margin: 0 0 7px;
-      color: #334a61
-    }
-
-    .field input {
-      display: block;
-      width: 100%;
-      height: 46px;
-      padding: 0 13px;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      font-size: 14px;
-      outline: none;
-      background: #fff
-    }
-
-    .field input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(22, 141, 92, .12)
-    }
-
-    .primary {
-      width: 100%;
-      height: 47px;
-      border: 0;
-      border-radius: 10px;
-      background: var(--primary);
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 8px
-    }
-
-    .primary:hover {
-      background: #107349
-    }
-
-    .switch {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-muted)
-    }
-
-    .switch a {
-      border: 0;
-      background: none;
-      color: #107349;
-      font-weight: 800;
-      padding: 4px
-    }
-
-    .notice {
-      display: none;
-      margin: 14px 0 0;
-      padding: 11px 12px;
-      border-radius: 9px;
-      font-size: 12px;
-      line-height: 1.5
-    }
-
-    .notice.error {
-      display: block;
-      background: #fff0ef;
-      color: #a32c28
-    }
-
-    .security {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      color: #94a3b8;
-      font-size: 11px;
-      margin-top: 23px
-    }
-
-    @media(max-width:850px) {
-      .page {
-        grid-template-columns: 1fr
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar · OptiWare</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #168d5c;
+        --primary-light: #e9f5ed;
+        --text-main: #0b4263;
+        --text-muted: #5f7785;
+        --bg-color: #f8fafc;
       }
 
-      .hero {
-        display: none
+      * { box-sizing: border-box; }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        padding: 28px 18px;
+        background: linear-gradient(145deg, #eaf2f5, #eef6f1 70%, #e4f0e8);
+        color: var(--text-main);
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
-      .right {
-        padding: 28px 18px
+      .wrap { width: min(420px, 100%); }
+
+      .brand {
+        margin: 0 0 28px;
+        text-align: center;
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -0.8px;
       }
 
-      .mobile-brand {
-        display: flex;
-        margin-bottom: 38px;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 8px;
-        width: min(420px, 100%)
+      .brand-ware { color: #58b883; }
+
+      .card {
+        padding: 38px;
+        border: 1px solid #e5ebf1;
+        border-radius: 22px;
+        background: #fff;
+        box-shadow: 0 20px 70px rgba(31, 55, 80, 0.08);
       }
 
-      .login-card {
-        padding: 30px 25px
+      .overline {
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
       }
 
-      .mobile-brand .brand-name {
-        font-size: 30px
-      }
-    }
-  </style>
-</head>
+      h1 { margin: 10px 0 8px; font-size: 29px; letter-spacing: -0.8px; }
 
-<body>
-  <div class="page">
-    <section class="hero">
-      <div class="brand">
-        <div class="brand-name"><span>Opti</span><span class="brand-ware">Ware</span></div>
-      </div>
-      <div class="hero-copy">
-        <h1>Kelola toko dan stok dengan mudah.</h1>
-        <p>Catat produk dan transaksi, serta pantau stok toko Anda melalui satu aplikasi.</p>
-        <div class="feature-list">
-          <div class="feature">
-            <div class="feature-icon">▦</div><strong>Data produk</strong><span>Catat produk dengan mudah</span>
+      .intro {
+        margin: 0 0 26px;
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .field { margin: 15px 0; }
+
+      label {
+        display: block;
+        margin: 0 0 7px;
+        color: #334a61;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      input {
+        display: block;
+        width: 100%;
+        height: 46px;
+        padding: 0 13px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #fff;
+        font: inherit;
+        font-size: 14px;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(22, 141, 92, 0.12);
+      }
+
+      .primary {
+        width: 100%;
+        height: 47px;
+        margin-top: 8px;
+        border: 0;
+        border-radius: 10px;
+        background: var(--primary);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .primary:hover { background: #107349; }
+      .primary:disabled { cursor: wait; opacity: 0.7; }
+
+      .switch {
+        margin-top: 18px;
+        color: var(--text-muted);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .switch a {
+        margin-left: 5px;
+        color: #107349;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .switch a:hover { text-decoration: underline; }
+
+      .notice {
+        display: none;
+        margin: 14px 0 0;
+        padding: 11px 12px;
+        border-radius: 9px;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .notice.error { display: block; background: #fff0ef; color: #a32c28; }
+
+      @media (max-width: 480px) { .card { padding: 30px 25px; } }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <div class="brand"><span>Opti</span><span class="brand-ware">Ware</span></div>
+      <section class="card">
+        <div class="overline">Daftar akun</div>
+        <h1>Buat akun admin</h1>
+        <p class="intro">Isi username dan password untuk mulai menggunakan OptiWare.</p>
+        <form id="registerForm">
+          <div class="field">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" autocomplete="username" placeholder="Buat username" required />
           </div>
-          <div class="feature">
-            <div class="feature-icon">↗</div><strong>Pantau stok</strong><span>Periksa stok yang hampir habis</span>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Minimal 6 karakter" minlength="6" required />
           </div>
-          <div class="feature">
-            <div class="feature-icon">◷</div><strong>Catatan transaksi</strong><span>Lihat riwayat transaksi toko</span>
+          <div class="field">
+            <label for="confirmPassword">Ulangi password</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Ulangi password" minlength="6" required />
           </div>
-        </div>
-      </div>
-    </section>
-    <main class="right">
-      <div style="width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column">
-        <div class="mobile-brand">
-          <div class="brand-name"><span>Opti</span><span class="brand-ware">Ware</span></div>
-        </div>
-        <section class="login-card">
-          <div class="card-overline">Daftar akun</div>
-          <h2>Buat akun admin</h2>
-          <p class="intro">Isi username dan password untuk mulai menggunakan OptiWare.</p>
-          <form id="authForm">
-            <div class="field"><label for="email">Username</label><input id="email" name="username" type="text"
-                autocomplete="username" placeholder="Buat username" required></div>
-            <div class="field"><label for="password">Password</label><input id="password" name="password"
-                type="password" autocomplete="new-password" placeholder="Minimal 6 karakter" minlength="6" required></div>
-            <div class="field"><label for="confirmPassword">Ulangi password</label><input id="confirmPassword"
-                type="password" autocomplete="new-password" placeholder="Ulangi password" minlength="6" required></div>
-            <button class="primary" id="submitBtn" type="submit">Buat akun</button>
-          </form>
-          <div class="notice" id="notice" role="status"></div>
-          <div class="switch">Sudah memiliki akun? <a href="/login.html">Masuk</a></div>
-          <div class="security">Akun admin digunakan untuk mengelola toko</div>
-        </section>
-      </div>
+          <button class="primary" id="submitBtn" type="submit">Buat akun</button>
+        </form>
+        <div class="notice" id="notice" role="status"></div>
+        <div class="switch">Sudah memiliki akun? <a href="login.html">Masuk</a></div>
+      </section>
     </main>
-  </div>
-  <script>
-    (() => {
-      const form = document.getElementById('authForm');
-      const emailInput = document.getElementById('email');
-      const passwordInput = document.getElementById('password');
-      const confirmPasswordInput = document.getElementById('confirmPassword');
-      const submitBtn = document.getElementById('submitBtn');
-      const notice = document.getElementById('notice');
+    <script>
+      (() => {
+        const form = document.getElementById("registerForm");
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const submitBtn = document.getElementById("submitBtn");
+        const notice = document.getElementById("notice");
 
-      function showNotice(message) {
-        notice.textContent = message;
-        notice.className = 'notice error';
-      }
-      function clearNotice() { notice.textContent = ''; notice.className = 'notice'; }
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault(); clearNotice(); submitBtn.disabled = true; submitBtn.textContent = 'Memproses...';
-        if (passwordInput.value !== confirmPasswordInput.value) {
-          showNotice('Password yang dimasukkan belum sama.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Buat akun';
-          return;
+        function showError(message) {
+          notice.textContent = message;
+          notice.className = "notice error";
         }
-        const payload = { username: emailInput.value.trim(), password: passwordInput.value };
-        try {
-          const response = await fetch('/api/register', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-          });
-          const body = await response.json();
-          if (!response.ok) throw new Error(body.pesan || 'Permintaan gagal.');
-          window.location.href = '/';
-        } catch (error) {
-          showNotice(error.message || 'Ada kendala saat masuk.');
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Buat akun';
-        }
-      });
-    })();
-  </script>
-</body>
 
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          notice.textContent = "";
+          notice.className = "notice";
+
+          if (passwordInput.value !== confirmPasswordInput.value) {
+            showError("Password yang dimasukkan belum sama.");
+            return;
+          }
+
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Memproses...";
+          try {
+            const response = await fetch("/api/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: usernameInput.value.trim(),
+                password: passwordInput.value,
+              }),
+            });
+            const body = await response.json();
+            if (!response.ok) throw new Error(body.pesan || "Pendaftaran gagal.");
+            window.location.href = "/";
+          } catch (error) {
+            showError(error.message || "Ada kendala saat mendaftar.");
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Buat akun";
+          }
+        });
+      })();
+    </script>
+  </body>
 </html>
