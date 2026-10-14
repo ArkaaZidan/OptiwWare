@@ -1,17 +1,6 @@
-/**
- * ====================================================================
- * OptiWare - Pengaturan Sistem & Usaha (pengaturan.js)
- * ====================================================================
- * Mengelola konfigurasi identitas toko, manajemen staf pengguna,
- * preferensi POS/stok, serta pencadangan & pemulihan database (backup/restore).
- */
-
 const STORAGE_KEY_SETTINGS = "optiware_app_settings";
 const STORAGE_KEY_USERS = "optiware_users_data";
 
-// --------------------------------------------------------------------
-// 1. DATA DEFAULT & HELPER DATABASE
-// --------------------------------------------------------------------
 const defaultSettings = {
     storeName: "OptiWare Ritel & Gudang",
     storeTagline: "Solusi Manajemen Inventaris & Ritel Modern",
@@ -76,9 +65,7 @@ function saveStoredUsers(data) {
     }
 }
 
-// --------------------------------------------------------------------
-// 2. LOGIKA WEBIX APPLICATION
-// --------------------------------------------------------------------
+// Logika Webix untuk halaman Pengaturan & Manajemen Pengguna
 if (typeof webix === "undefined") {
     console.error("Library Webix belum dimuat!");
 } else {
@@ -93,9 +80,7 @@ if (typeof webix === "undefined") {
             return;
         }
 
-        // ------------------------------------------------------------
-        // A. WEBIX TABEL PENGGUNA & STAF
-        // ------------------------------------------------------------
+        // Webix Datatable untuk Daftar Pengguna
         const tableUsers = webix.ui({
             container: "users-table-container",
             view: "datatable",
@@ -176,14 +161,11 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // Responsif window resize
         webix.event(window, "resize", function () {
             if ($$("table_users_settings")) $$("table_users_settings").resize();
         });
 
-        // ------------------------------------------------------------
-        // B. POPUP AKSI PENGGUNA
-        // ------------------------------------------------------------
+        // Popup Opsi Aksi Pengguna (Edit, Ubah Status, Hapus)
         const userActionPopup = webix.ui({
             view: "popup",
             id: "user_action_popup",
@@ -222,9 +204,7 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // C. MODAL TAMBAH & EDIT PENGGUNA
-        // ------------------------------------------------------------
+        // CRUD User Modal
         const userModal = webix.ui({
             view: "window",
             id: "user_modal",
@@ -375,9 +355,6 @@ if (typeof webix === "undefined") {
         const btnAddUser = document.getElementById("btn-tambah-user");
         if (btnAddUser) btnAddUser.addEventListener("click", () => openUserModal("add"));
 
-        // ------------------------------------------------------------
-        // D. SETTINGS TAB SWITCHING
-        // ------------------------------------------------------------
         const settingsTabs = document.querySelectorAll(".settings-tabs .settings-tab");
         const tabContents = {
             store: document.getElementById("tab-content-store"),
@@ -404,9 +381,6 @@ if (typeof webix === "undefined") {
             });
         });
 
-        // ------------------------------------------------------------
-        // E. LOAD & SAVE FORM SETTINGS
-        // ------------------------------------------------------------
         function populateSettingsForm() {
             const s = getStoredSettings();
             if (document.getElementById("store-name")) document.getElementById("store-name").value = s.storeName || "";
@@ -472,9 +446,6 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // F. CADANGAN & PEMULIHAN DATABASE (BACKUP & RESTORE)
-        // ------------------------------------------------------------
         // 1. Export JSON Backup
         const btnExportBackup = document.getElementById("btn-export-backup");
         if (btnExportBackup) {

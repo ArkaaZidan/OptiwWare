@@ -1,17 +1,7 @@
-/**
- * ====================================================================
- * OptiWare - Laporan & Analisis Bisnis (laporan.js)
- * ====================================================================
- * Mengelola visualisasi laporan penjualan, analisis laba per kategori,
- * peringkat produk best seller, dan valuasi aset menggunakan Webix UI.
- */
-
 const STORAGE_KEY_PRODUCTS = "optiware_products_data";
 const STORAGE_KEY_TRANSACTIONS = "optiware_transactions_data";
 
-// --------------------------------------------------------------------
-// 1. DATA LAPORAN & KALKULASI
-// --------------------------------------------------------------------
+// Data laporan dan datatable
 function getStoredProducts() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY_PRODUCTS);
@@ -70,9 +60,7 @@ const topProductsData = [
     { id: 5, rank: 5, kode: "OPT-008", nama: "Kopi Kapal Api 100g", kategori: "Minuman", qty: 30, omset: 225000, laba: 45000, share: "8.6%" }
 ];
 
-// --------------------------------------------------------------------
-// 2. LOGIKA WEBIX APPLICATION
-// --------------------------------------------------------------------
+// Logic Webix untuk halaman laporan
 if (typeof webix === "undefined") {
     console.error("Library Webix belum dimuat!");
 } else {
@@ -88,9 +76,7 @@ if (typeof webix === "undefined") {
             return;
         }
 
-        // ------------------------------------------------------------
-        // A. WEBIX PAGER & TABEL UTAMA LAPORAN
-        // ------------------------------------------------------------
+        // Tabel Utama Laporan
         webix.ui({
             view: "pager",
             id: "laporan_pager",
@@ -157,9 +143,7 @@ if (typeof webix === "undefined") {
             data: dailySalesReportData
         });
 
-        // ------------------------------------------------------------
-        // B. WEBIX TABEL SUB: TOP 5 BEST SELLER
-        // ------------------------------------------------------------
+        // Inisialisasi Tabel Best Seller
         const tableBestSeller = webix.ui({
             container: "bestseller-table-container",
             view: "datatable",
@@ -195,15 +179,12 @@ if (typeof webix === "undefined") {
             data: topProductsData
         });
 
-        // Responsif window resize
         webix.event(window, "resize", function () {
             if ($$("table_laporan_utama")) $$("table_laporan_utama").resize();
             if ($$("table_bestseller_sub")) $$("table_bestseller_sub").resize();
         });
 
-        // ------------------------------------------------------------
-        // C. SINKRONISASI REAL-TIME METRIK DARI DATABASE
-        // ------------------------------------------------------------
+        // Real Time Metrics Sync: Omset, HPP, Laba, Margin, Aset
         function syncRealMetrics() {
             const products = getStoredProducts();
             const txList = getStoredTransactions();
@@ -241,9 +222,7 @@ if (typeof webix === "undefined") {
 
         syncRealMetrics();
 
-        // ------------------------------------------------------------
-        // D. TAB SWITCHING LAPORAN
-        // ------------------------------------------------------------
+        // Switching Tabs Laporan: Penjualan, Kategori, Best Seller
         const reportTabs = document.querySelectorAll(".report-tabs .report-tab");
         const titleEl = document.getElementById("report-table-title");
         const subSection = document.getElementById("section-top-products");
@@ -291,9 +270,7 @@ if (typeof webix === "undefined") {
             });
         });
 
-        // ------------------------------------------------------------
-        // E. FILTER PENCARIAN REAL-TIME
-        // ------------------------------------------------------------
+        // Real-time Search Filter untuk Tabel Laporan
         const searchInput = document.getElementById("topbar-search-laporan");
         if (searchInput) {
             searchInput.addEventListener("input", function () {
@@ -310,9 +287,7 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // F. TOMBOL EXPORT EXCEL & CETAK
-        // ------------------------------------------------------------
+        // Cetak dan Export CSV Laporan
         const btnExport = document.getElementById("btn-export-laporan");
         if (btnExport) {
             btnExport.addEventListener("click", function () {
@@ -359,9 +334,7 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // G. PROFIL POPUP (Konsisten)
-        // ------------------------------------------------------------
+        // Popup Profil & Logout
         const profilePopup = webix.ui({
             view: "popup",
             id: "profile_popup_laporan",

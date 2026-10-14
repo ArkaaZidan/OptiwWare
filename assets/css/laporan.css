@@ -1,8 +1,3 @@
-/* ====================================================================
-   OptiWare - Stylesheet Khusus Halaman Laporan (laporan.css)
-   ==================================================================== */
-
-/* --- HEADER BUTTONS --- */
 .header-buttons {
     display: flex;
     align-items: center;
@@ -52,7 +47,6 @@
     color: var(--text-main);
 }
 
-/* --- STATS GRID LAPORAN FINANSIAL --- */
 .laporan-stats-grid {
     grid-template-columns: repeat(4, 1fr);
     margin-bottom: 24px;
@@ -82,7 +76,6 @@
     color: var(--text-muted);
 }
 
-/* --- REPORT VIEW TABS --- */
 .report-tabs {
     display: flex;
     align-items: center;
@@ -137,12 +130,10 @@
     color: #ffffff;
 }
 
-/* --- SUB REPORT SECTION --- */
 .sub-report-section {
     margin-top: 24px;
 }
 
-/* --- RANK BADGES (BEST SELLER) --- */
 .rank-badge {
     width: 28px;
     height: 28px;
@@ -178,7 +169,6 @@
     border: 1px solid #e2e8f0;
 }
 
-/* --- MARGIN TAGS --- */
 .margin-badge {
     font-size: 12px;
     font-weight: 700;
@@ -202,14 +192,12 @@
     color: #b45309;
 }
 
-/* --- WEBIX PAGER WRAPPER --- */
 .pager-wrapper {
     margin-top: 16px;
     display: flex;
     justify-content: flex-end;
 }
 
-/* --- PRINT STYLESHEET (CETAK LAPORAN) --- */
 @media print {
     body {
         overflow: visible !important;
@@ -241,7 +229,6 @@
     }
 }
 
-/* --- RESPONSIVE UNTUK LAYAR KECIL --- */
 @media (max-width: 1200px) {
     .laporan-stats-grid {
         grid-template-columns: repeat(2, 1fr);

@@ -1,10 +1,3 @@
-/* Penghubung halaman OptiWare dengan backend (MongoDB).
-   Dimuat SEBELUM script halaman. Cara kerja:
-   1. Saat halaman dibuka, data diambil dari /api/sync lalu ditaruh di localStorage,
-      jadi script halaman membaca data dari database tanpa perlu diubah banyak.
-   2. Saat script halaman menyimpan ke localStorage, perubahannya (tambah/ubah/hapus)
-      dikirim ke /api/sync/<nama>. Antrian kirim disimpan di localStorage, jadi tidak
-      hilang walau halaman ditutup atau pindah sebelum selesai. */
 (function () {
     var NAMA = {
         "optiware_products_data": "products",

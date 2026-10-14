@@ -4,20 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan & Analisis Bisnis - OptiWare</title>
-    
-    <!-- Webix CSS -->
     <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css">
-    
-    <!-- Font Awesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts untuk tipografi Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Base CSS (dari dashboard) -->
     <link rel="stylesheet" href="assets/css/universal.css">
-    
-    <!-- Custom CSS terpisah khusus Halaman Laporan -->
     <link rel="stylesheet" href="assets/css/laporan.css">
 </head>
 <body>
@@ -88,7 +78,6 @@
                 </div>
             </header>
 
-            <!-- PAGE HEADER -->
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Laporan & Analisis Bisnis</h1>
@@ -104,7 +93,6 @@
                 </div>
             </div>
 
-            <!-- FINANCIAL METRICS SUMMARY CARDS -->
             <div class="stats-grid laporan-stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon icon-omset"><i class="fa-solid fa-money-bill-trend-up"></i></div>
@@ -140,7 +128,6 @@
                 </div>
             </div>
 
-            <!-- REPORT VIEW TABS -->
             <div class="report-tabs">
                 <div class="report-tab active" data-report="sales">
                     <i class="fa-solid fa-calendar-days"></i>
@@ -156,7 +143,6 @@
                 </div>
             </div>
 
-            <!-- TABLE SECTION: MAIN REPORT -->
             <div class="table-section">
                 <div class="table-header">
                     <h2 id="report-table-title">Rekapitulasi Penjualan Harian (Oktober 2026)</h2>
@@ -170,7 +156,6 @@
                 <div id="laporan-pager-container" class="pager-wrapper"></div>
             </div>
 
-            <!-- TABLE SECTION: TOP PRODUCTS -->
             <div class="table-section sub-report-section" id="section-top-products">
                 <div class="table-header">
                     <h2>Peringkat 5 Produk Terlaris (Kontribusi Omset Terbesar)</h2>
@@ -183,10 +168,7 @@
         </main>
     </div>
 
-    <!-- Webix JS Library -->
     <script src="https://cdn.webix.com/edge/webix.js"></script>
-    
-    <!-- Custom Laporan JS terpisah -->
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/export-csv.js"></script>
     <script src="assets/js/sync.js"></script>

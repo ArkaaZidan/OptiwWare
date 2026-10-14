@@ -1,21 +1,9 @@
-/**
- * ====================================================================
- * OptiWare Dashboard - Webix Application Logic
- * ====================================================================
- * Mengelola interaksi dashboard gudang dan ritel menggunakan library Webix UI.
- * Terintegrasi dengan index.html dan style.css.
- */
-
-// Memeriksa ketersediaan library Webix
 if (typeof webix === "undefined") {
     console.error("Library Webix belum dimuat. Pastikan tag script CDN Webix telah dimasukkan.");
 } else {
-    // Inisialisasi saat Webix dan DOM siap
     webix.ready(function () {
 
-        // ------------------------------------------------------------
-        // 1. DATABASE PRODUK (Sinkron dengan produk.html via localStorage)
-        // ------------------------------------------------------------
+        // Database produk
         const STORAGE_KEY = "optiware_products_data";
 
         function getStoredProducts() {
@@ -60,17 +48,14 @@ if (typeof webix === "undefined") {
 
         let currentSelectedId = null;
 
-        // Base metrics untuk sinkronisasi stat card
-        // (nilai dihitung ulang dari data database oleh syncDashboardStats)
+        // Base state untuk statistik dashboard
         let statsState = {
             totalProduk: 0,
             totalStok: 0,
             hampirHabis: 0
         };
 
-        // ------------------------------------------------------------
-        // 2. INISIALISASI WEBIX DATATABLE
-        // ------------------------------------------------------------
+        // Datatable Webix untuk menampilkan daftar produk
         const tableContainer = document.getElementById("table-container");
         if (!tableContainer) {
             console.error("Kontainer #table-container tidak ditemukan di index.html!");
@@ -176,9 +161,7 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // 3. POPUP MENU AKSI (Aksi di tiap baris produk)
-        // ------------------------------------------------------------
+        // Popup aksi untuk setiap baris produk
         const actionPopup = webix.ui({
             view: "popup",
             id: "action_popup",
@@ -222,9 +205,7 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // 4. MODAL DIALOG DETAIL PRODUK
-        // ------------------------------------------------------------
+        // Detail produk dalam modal Webix
         const detailWindow = webix.ui({
             view: "window",
             id: "detail_window",
@@ -288,9 +269,7 @@ if (typeof webix === "undefined") {
             $$("detail_window").show();
         }
 
-        // ------------------------------------------------------------
-        // 5. MODAL FORM: TAMBAH & EDIT PRODUK
-        // ------------------------------------------------------------
+        // CRUD Produk: Tambah & Edit Produk
         let formMode = "add";
 
         const productWindow = webix.ui({
@@ -462,9 +441,7 @@ if (typeof webix === "undefined") {
             syncDashboardStats();
         }
 
-        // ------------------------------------------------------------
-        // 6. MODAL CEPAT: UPDATE STOK PRODUK
-        // ------------------------------------------------------------
+        // Update stok produk melalui modal Webix
         const stockWindow = webix.ui({
             view: "window",
             id: "stock_window",

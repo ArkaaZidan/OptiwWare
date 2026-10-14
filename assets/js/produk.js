@@ -1,16 +1,5 @@
-/**
- * ====================================================================
- * OptiWare - Katalog & Manajemen Produk (produk.js)
- * ====================================================================
- * File JavaScript terpisah yang mengelola data produk menggunakan Webix UI.
- * Database tersinkronisasi dengan index.html melalui localStorage.
- */
-
 const STORAGE_KEY = "optiware_products_data";
 
-// --------------------------------------------------------------------
-// 1. DATABASE PRODUK DEFAULT (Selaras dengan data di index.html)
-// --------------------------------------------------------------------
 const defaultProducts = [
     { 
         id: 1, 
@@ -174,9 +163,6 @@ function formatRupiah(number) {
     return "Rp " + (Number(number) || 0).toLocaleString("id-ID");
 }
 
-// --------------------------------------------------------------------
-// 2. LOGIKA WEBIX APPLICATION
-// --------------------------------------------------------------------
 if (typeof webix === "undefined") {
     console.error("Library Webix belum dimuat!");
 } else {
@@ -191,9 +177,6 @@ if (typeof webix === "undefined") {
             return;
         }
 
-        // ------------------------------------------------------------
-        // A. INISIALISASI WEBIX PAGER & MASTER DATATABLE
-        // ------------------------------------------------------------
         const productPager = webix.ui({
             view: "pager",
             id: "produk_pager",
@@ -341,9 +324,6 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // B. POPUP MENU AKSI
-        // ------------------------------------------------------------
         const productActionPopup = webix.ui({
             view: "popup",
             id: "product_action_popup",
@@ -386,9 +366,6 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // C. MODAL RINCIAN DETAIL PRODUK
-        // ------------------------------------------------------------
         const detailModal = webix.ui({
             view: "window",
             id: "detail_modal",
@@ -472,9 +449,6 @@ if (typeof webix === "undefined") {
             $$("detail_modal").show();
         }
 
-        // ------------------------------------------------------------
-        // D. MODAL FORM: TAMBAH & EDIT PRODUK
-        // ------------------------------------------------------------
         const productFormModal = webix.ui({
             view: "window",
             id: "product_form_modal",
@@ -716,9 +690,6 @@ if (typeof webix === "undefined") {
             syncDatabaseAndStats();
         }
 
-        // ------------------------------------------------------------
-        // E. MODAL UPDATE STOK CEPAT
-        // ------------------------------------------------------------
         const quickStockModal = webix.ui({
             view: "window",
             id: "quick_stock_modal",
@@ -798,9 +769,6 @@ if (typeof webix === "undefined") {
             webix.message({ type: "success", text: `Stok "${item.nama}" diupdate menjadi ${newStok} unit` });
         }
 
-        // ------------------------------------------------------------
-        // F. KONFIRMASI HAPUS PRODUK
-        // ------------------------------------------------------------
         function confirmDelete(item) {
             webix.confirm({
                 title: "Konfirmasi Hapus",
@@ -818,9 +786,6 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // G. SINKRONISASI DATABASE & KARTU STATISTIK
-        // ------------------------------------------------------------
         function syncDatabaseAndStats() {
             const table = $$("table_produk_master");
             if (!table) return;
@@ -866,9 +831,6 @@ if (typeof webix === "undefined") {
         // Jalankan sinkronisasi awal
         syncDatabaseAndStats();
 
-        // ------------------------------------------------------------
-        // H. FILTER & SEARCH HANDLERS
-        // ------------------------------------------------------------
         const searchInput = document.getElementById("topbar-search-produk");
         const filterKategori = document.getElementById("filter-kategori");
         const filterStatus = document.getElementById("filter-status");
@@ -948,9 +910,6 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // I. POPUP PROFIL (Konsisten dengan index.html)
-        // ------------------------------------------------------------
         const profilePopup = webix.ui({
             view: "popup",
             id: "profile_popup_page",

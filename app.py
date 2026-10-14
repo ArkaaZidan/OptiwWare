@@ -67,7 +67,7 @@ def login_required(fungsi):
     return pembungkus
 
 
-# halaman login (kalau sudah login langsung ke dashboard)
+# Login Page
 @app.route("/")
 def halaman_login():
     if "user_id" in session:
@@ -85,7 +85,7 @@ def halaman_register():
     return send_from_directory(FOLDER, "register.html")
 
 
-# halaman dashboard (index.html), hanya untuk yang sudah login
+# Page Dashboard (hanya bisa diakses kalau sudah login)
 @app.route("/dashboard")
 def halaman_dashboard():
     if "user_id" not in session:
@@ -94,8 +94,6 @@ def halaman_dashboard():
     jawaban.headers["Cache-Control"] = "no-store"
     return jawaban
 
-
-# file css, js, dan gambar di folder assets
 @app.route("/assets/<path:nama_file>")
 def aset_frontend(nama_file):
     return send_from_directory(os.path.join(FOLDER, "assets"), nama_file)
@@ -106,7 +104,6 @@ HALAMAN_APP = {
     "laporan.html", "pengaturan.html",
 }
 
-# halaman lain (hanya yang ada di HALAMAN_APP, wajib login)
 @app.route("/<path:nama_file>")
 def halaman_frontend(nama_file):
     if nama_file == "index.html":
@@ -120,7 +117,6 @@ def halaman_frontend(nama_file):
     return send_from_directory(FOLDER, nama_file)
 
 
-# cek apakah belum ada akun (login.html menampilkan form buat akun admin)
 @app.route("/api/setup-status")
 def status_setup():
     return jsonify({"needsSetup": tabel_user.find_one({}) is None})
@@ -134,7 +130,7 @@ def database_error(error):
     }), 500
 
 
-# buat akun admin pertama
+# Membuat akun admin
 @app.route("/api/register", methods=["POST"])
 def register():
     if tabel_user.find_one({}) is not None:
@@ -164,7 +160,7 @@ def register():
     return jsonify({"pesan": "Register berhasil"}), 201
 
 
-# login
+# Logika Login
 @app.route("/api/login", methods=["POST"])
 def login():
     data = request.get_json(silent=True) or {}
@@ -184,15 +180,11 @@ def login():
     return jsonify({"pesan": "Login berhasil", "username": user["username"]})
 
 
-# logout
+# Logika Logout
 @app.route("/api/logout", methods=["POST"])
 def logout():
     session.clear()
     return jsonify({"pesan": "Logout berhasil"})
-
-
-# ---------- penghubung halaman (produk, transaksi, stok gudang, laporan, pengaturan) ----------
-# Halaman-halaman itu menyimpan data berupa array JSON; assets/js/sync.js mengirim perubahannya ke sini.
 
 BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"]
 
@@ -440,7 +432,7 @@ TABEL_SYNC = {
 }
 
 
-# ambil semua data untuk halaman lain sekaligus (dipanggil sync.js saat halaman dibuka)
+# Mengambil semua data untuk sinkronisasi halaman
 @app.route("/api/sync", methods=["GET"])
 @login_required
 def ambil_sinkronisasi():
@@ -457,7 +449,7 @@ def ambil_sinkronisasi():
     })
 
 
-# simpan perubahan dari halaman lain: upsert, hapus, atau reset satu jenis data
+# CRUD data untuk sinkronisasi halaman
 @app.route("/api/sync/<nama>", methods=["POST"])
 @login_required
 def simpan_sinkronisasi(nama):

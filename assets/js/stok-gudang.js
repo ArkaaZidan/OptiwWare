@@ -1,18 +1,7 @@
-/**
- * ====================================================================
- * OptiWare - Manajemen Stok Gudang (stok-gudang.js)
- * ====================================================================
- * Mengelola penempatan rak gudang, mutasi inbound/outbound, stock opname,
- * serta visualisasi kapasitas gudang menggunakan Webix UI.
- * Database tersinkronisasi dua arah via localStorage.
- */
-
 const STORAGE_KEY_PRODUCTS = "optiware_products_data";
 const STORAGE_KEY_LOGS = "optiware_stock_logs";
 
-// --------------------------------------------------------------------
-// 1. DATA DEFAULT & HELPER DATABASE
-// --------------------------------------------------------------------
+// Database default data
 const defaultProducts = [
     { id: 1, kode: "OPT-001", nama: "Indomie Goreng 85g", kategori: "Makanan", stok: 120, kapasitas: 200, status: "Aman", rak: "Gudang A - Rak 01", supplier: "PT Indofood Makmur" },
     { id: 2, kode: "OPT-002", nama: "Aqua 600ml", kategori: "Minuman", stok: 45, kapasitas: 150, status: "Aman", rak: "Gudang A - Rak 02", supplier: "PT Tirta Investama" },
@@ -95,9 +84,6 @@ function getFormattedNow() {
     return `${day} ${mon} ${year} ${hour}:${min}`;
 }
 
-// --------------------------------------------------------------------
-// 2. WEBIX APPLICATION INITIALIZATION
-// --------------------------------------------------------------------
 if (typeof webix === "undefined") {
     console.error("Library Webix belum dimuat!");
 } else {
@@ -114,9 +100,7 @@ if (typeof webix === "undefined") {
             return;
         }
 
-        // ------------------------------------------------------------
-        // A. WEBIX PAGER & TABEL STOK GUDANG (INVENTORY)
-        // ------------------------------------------------------------
+        // Tabel stok gudang
         webix.ui({
             view: "pager",
             id: "gudang_pager",
@@ -245,9 +229,7 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // B. WEBIX TABEL RIWAYAT LOG MUTASI
-        // ------------------------------------------------------------
+        // Riwayat mutasi stok
         const tableLogs = webix.ui({
             container: "log-table-container",
             view: "datatable",
@@ -295,9 +277,7 @@ if (typeof webix === "undefined") {
             if ($$("table_log_mutasi")) $$("table_log_mutasi").resize();
         });
 
-        // ------------------------------------------------------------
-        // C. POPUP MENU TINDAKAN
-        // ------------------------------------------------------------
+        // Popup menu aksi stok gudang
         const gudangActionPopup = webix.ui({
             view: "popup",
             id: "gudang_action_popup",
@@ -340,9 +320,7 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // D. MODAL STOK MASUK (INBOUND)
-        // ------------------------------------------------------------
+        // Modal Stok Masuk (Inbound)
         const inboundModal = webix.ui({
             view: "window",
             id: "inbound_modal",
@@ -454,9 +432,7 @@ if (typeof webix === "undefined") {
             webix.message({ type: "success", text: `Berhasil menambahkan +${qtyNum} unit ${item.nama}` });
         }
 
-        // ------------------------------------------------------------
-        // E. MODAL STOK KELUAR (OUTBOUND)
-        // ------------------------------------------------------------
+        // Modal Stok Keluar (Outbound)
         const outboundModal = webix.ui({
             view: "window",
             id: "outbound_modal",
@@ -560,9 +536,7 @@ if (typeof webix === "undefined") {
             webix.message({ type: "info", text: `Berhasil mengeluarkan -${qtyNum} unit ${item.nama}` });
         }
 
-        // ------------------------------------------------------------
-        // F. MODAL MUTASI PINDAH RAK
-        // ------------------------------------------------------------
+        // Modal Pindah Lokasi Rak (Transfer)
         const transferModal = webix.ui({
             view: "window",
             id: "transfer_modal",
@@ -647,9 +621,7 @@ if (typeof webix === "undefined") {
             webix.message({ type: "success", text: `Lokasi "${item.nama}" dipindahkan ke ${val.rakBaru}` });
         }
 
-        // ------------------------------------------------------------
-        // G. MODAL STOCK OPNAME
-        // ------------------------------------------------------------
+        // Modal Penyesuaian Fisik (Stock Opname)
         const opnameModal = webix.ui({
             view: "window",
             id: "opname_modal",
@@ -757,9 +729,7 @@ if (typeof webix === "undefined") {
             webix.message({ type: "success", text: `Stock opname ${item.nama} disimpan. Stok kini: ${fisikNum}` });
         }
 
-        // ------------------------------------------------------------
-        // H. LOG MUTASI HELPER
-        // ------------------------------------------------------------
+        // Log mutasi stok
         function addLogRecord(logData) {
             const newLog = {
                 id: new Date().getTime(),
@@ -781,9 +751,7 @@ if (typeof webix === "undefined") {
             syncStorageAndMetrics();
         }
 
-        // ------------------------------------------------------------
-        // I. SINKRONISASI & PERHITUNGAN METRIK GUDANG
-        // ------------------------------------------------------------
+        // Sinkronisasi data tabel gudang dan log mutasi ke localStorage, serta update statistik
         function syncStorageAndMetrics() {
             const table = $$("table_stok_gudang");
             if (!table) return;
@@ -798,7 +766,7 @@ if (typeof webix === "undefined") {
             saveStoredProducts(allProducts);
 
             // Stok masuk / keluar hari ini dihitung dari log mutasi
-            const hariIni = getFormattedNow().slice(0, 11); // "DD Mon YYYY"
+            const hariIni = getFormattedNow().slice(0, 11); 
             let masuk = 0, keluar = 0;
             const logTable = $$("table_log_mutasi");
             if (logTable) {
@@ -823,9 +791,7 @@ if (typeof webix === "undefined") {
         // Jalankan sinkronisasi awal
         syncStorageAndMetrics();
 
-        // ------------------------------------------------------------
-        // J. FILTER ZONA GUDANG (TABS) & PENCARIAN REAL-TIME
-        // ------------------------------------------------------------
+        // Filter berdasarkan zona gudang dan pencarian
         const zoneTabs = document.querySelectorAll(".warehouse-zones .zone-tab");
         const searchInput = document.getElementById("topbar-search-gudang");
 
@@ -884,9 +850,7 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // K. PROFIL POPUP (Konsisten)
-        // ------------------------------------------------------------
+        // Profil Pengguna & Logout
         const profilePopup = webix.ui({
             view: "popup",
             id: "profile_popup_gudang",
@@ -929,7 +893,7 @@ if (typeof webix === "undefined") {
             item.addEventListener("click", function (e) {
                 const href = this.getAttribute("href");
                 if (href && href !== "#" && !href.startsWith("javascript")) {
-                    return; // Biarkan browser berpindah halaman
+                    return; 
                 }
                 e.preventDefault();
                 navItems.forEach(n => n.classList.remove("active"));

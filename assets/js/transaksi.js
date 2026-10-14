@@ -1,19 +1,8 @@
-/**
- * ====================================================================
- * OptiWare - Transaksi & Kasir Penjualan (transaksi.js)
- * ====================================================================
- * Mengelola riwayat transaksi penjualan ritel, kasir POS, bukti struk,
- * dan status pembayaran menggunakan Webix UI.
- * Terintegrasi dua arah dengan database stok dan mutasi gudang via localStorage.
- */
-
 const STORAGE_KEY_PRODUCTS = "optiware_products_data";
 const STORAGE_KEY_TRANSACTIONS = "optiware_transactions_data";
 const STORAGE_KEY_LOGS = "optiware_stock_logs";
 
-// --------------------------------------------------------------------
-// 1. DATA AWAL TRANSAKSI & HELPER
-// --------------------------------------------------------------------
+// Data default untuk transaksi, digunakan jika localStorage kosong
 const defaultTransactions = [
     {
         id: 86,
@@ -216,9 +205,7 @@ function getFormattedNow() {
     return `${day} ${mon} ${year} ${hour}:${min}`;
 }
 
-// --------------------------------------------------------------------
-// 2. LOGIKA WEBIX APPLICATION
-// --------------------------------------------------------------------
+// Logika Webix UI untuk halaman transaksi, kasir POS, dan struk bukti pembayaran
 if (typeof webix === "undefined") {
     console.error("Library Webix belum dimuat!");
 } else {
@@ -233,9 +220,6 @@ if (typeof webix === "undefined") {
             return;
         }
 
-        // ------------------------------------------------------------
-        // A. WEBIX PAGER & TABEL TRANSAKSI
-        // ------------------------------------------------------------
         webix.ui({
             view: "pager",
             id: "transaksi_pager",
@@ -372,9 +356,7 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // B. POPUP MENU AKSI TRANSAKSI
-        // ------------------------------------------------------------
+        // Aksi klik di luar popup untuk menutupnya
         const trxActionPopup = webix.ui({
             view: "popup",
             id: "trx_action_popup",
@@ -413,9 +395,7 @@ if (typeof webix === "undefined") {
             }
         });
 
-        // ------------------------------------------------------------
-        // C. MODAL STRUK BUKTI TRANSAKSI (RECEIPT INVOICE)
-        // ------------------------------------------------------------
+        // Struk bukti pembayaran (modal)
         const receiptModal = webix.ui({
             view: "window",
             id: "receipt_modal",
@@ -593,9 +573,7 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // D. MODAL TRANSAKSI BARU (KASIR POS PENJUALAN)
-        // ------------------------------------------------------------
+        // Modal kasir POS untuk membuat transaksi baru
         const posModal = webix.ui({
             view: "window",
             id: "pos_modal",
@@ -956,9 +934,7 @@ if (typeof webix === "undefined") {
             showReceipt(newTx);
         }
 
-        // ------------------------------------------------------------
-        // E. SINKRONISASI DATABASE & METRIK STATISTIK
-        // ------------------------------------------------------------
+        // Sinkronisasi data transaksi di storage dan update statistik
         function syncStorageAndStats() {
             const table = $$("table_transaksi");
             if (!table) return;
@@ -1005,9 +981,7 @@ if (typeof webix === "undefined") {
 
         syncStorageAndStats();
 
-        // ------------------------------------------------------------
-        // F. FILTER & SEARCH HANDLERS
-        // ------------------------------------------------------------
+        // Filter & Pencarian Transaksi
         const searchInput = document.getElementById("topbar-search-transaksi");
         const filterStatus = document.getElementById("filter-status-trx");
         const filterMetode = document.getElementById("filter-metode-trx");
@@ -1080,9 +1054,7 @@ if (typeof webix === "undefined") {
             });
         }
 
-        // ------------------------------------------------------------
-        // G. POPUP PROFIL (Konsisten)
-        // ------------------------------------------------------------
+        // Popup Profil & Logout
         const profilePopup = webix.ui({
             view: "popup",
             id: "profile_popup_trx",
@@ -1125,7 +1097,7 @@ if (typeof webix === "undefined") {
             item.addEventListener("click", function (e) {
                 const href = this.getAttribute("href");
                 if (href && href !== "#" && !href.startsWith("javascript")) {
-                    return; // Biarkan browser berpindah halaman
+                    return; 
                 }
                 e.preventDefault();
                 navItems.forEach(n => n.classList.remove("active"));
