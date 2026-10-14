@@ -47,6 +47,12 @@ if (typeof webix === "undefined") {
             }
         }
 
+        function persistTable() {
+            const all = [];
+            $$("table_produk").data.each(function (obj) { all.push(obj); });
+            saveStoredProducts(all);
+}
+
         const initialProducts = getStoredProducts();
 
         let currentSelectedId = null;
@@ -448,6 +454,7 @@ if (typeof webix === "undefined") {
             }
 
             $$("product_window").hide();
+            persistTable();
             syncDashboardStats();
         }
 
@@ -532,6 +539,7 @@ if (typeof webix === "undefined") {
             $$("stock_window").hide();
 
             statsState.totalStok += diff;
+            persistTable(); 
             syncDashboardStats();
             webix.message({ type: "success", text: `Stok "${item.nama}" diperbarui ke ${newStok} unit` });
         }
@@ -551,6 +559,7 @@ if (typeof webix === "undefined") {
                         statsState.totalProduk = Math.max(0, statsState.totalProduk - 1);
                         statsState.totalStok = Math.max(0, statsState.totalStok - item.stok);
                         $$("table_produk").remove(item.id);
+                        persistTable();
                         syncDashboardStats();
                         webix.message({ type: "info", text: `Produk "${item.nama}" telah dihapus` });
                     }
